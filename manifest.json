@@ -1,15 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "Free Mobile Invoice Downloader",
+  "name": "Invoice Downloader",
   "version": "1.0",
-  "description": "Downloads invoices from Free Mobile account.",
+  "description": "Downloads invoices automatically from Orange, FreeMobile, OpeanAI...",
   "permissions": [
     "activeTab",
     "scripting",
     "storage",
     "downloads",
     "tabs",
-    "webNavigation"
+    "webNavigation",
+    "webRequest",
+    "debugger"
   ],
   "background": {
     "service_worker": "background.js"
@@ -19,9 +21,15 @@
   },
   "host_permissions": [
     "https://mobile.free.fr/*",
-    "https://espace-client.orange.fr/*"
+    "https://espace-client.orange.fr/*",
+    "https://*.openai.com/*",
+    "https://*.stripe.com/*"
   ],
   "icons": {
     "128": "icon128.png"
-  }
+  },
+  "web_accessible_resources": [{
+    "resources": ["monkeyPatchFetch.js"],
+    "matches": ["<all_urls>"]
+  }]
 }
