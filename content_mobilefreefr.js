@@ -1,8 +1,14 @@
-console.log('content.js')
+console.log("mobilefreefr")
 
 if (window.location.href.startsWith('https://mobile.free.fr/account/v2/login')) {
-    // If we are on the login page, click the login button
-    document.querySelector('#auth-connect')?.click()
+    // this is not working, as the Google Password Manager to let the extension see the username/password until the user interact with the page
+    // a workaround is to store the password
+    // could also wait for field update, to click on the button
+    if(document.querySelector('#login-username').value.length
+        && document.querySelector('#login-password').value.length) {
+        document.querySelector('#auth-connect')?.click()
+    }
+
 } else if (window.location.href.startsWith('https://mobile.free.fr/account/conso-et-factures')) {
 
     let invoices = []
