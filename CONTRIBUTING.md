@@ -1,3 +1,12 @@
+The code is currently dirty.
+I've added 4 sellers, and different approaches is used for each.
+Will have to figure out for a "framework" later:
+- where to locate download code (worker vs tab)
+- download on the user computer or upload to GDrive, etc...
+- automatically inject the code of a seller (manifest.json > content_scripts)
+- who lead the logic (worker vs tab), knowing that specific action can only be performed on one or the other
+
+
 # Dev notes for myself
 If I don't want to click on the popup button multiple times (when not connected to free.fr), 2 solutions:
 

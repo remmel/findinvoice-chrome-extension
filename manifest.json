@@ -23,7 +23,8 @@
     "https://mobile.free.fr/*",
     "https://espace-client.orange.fr/*",
     "https://*.openai.com/*",
-    "https://*.stripe.com/*"
+    "https://*.stripe.com/*",
+    "https://*.auchantelecom.fr/*"
   ],
   "icons": {
     "128": "icon128.png"

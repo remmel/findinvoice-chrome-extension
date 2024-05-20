@@ -11,7 +11,12 @@ const URLS = {
     },
     openaicom: {
         'invoices': 'https://chat.openai.com/account/manage' //https://pay.openai.com/
-        // 'invoices': 'https://pay.openai.com/p/session/live_YWNjdF8xSE9yU3dDNmgxbnhHb0kzLF9RN2V2enowV2I1M3UyNmZGRndUNHozaWtpSElsNEFr0100Rs8vSlRE'
+    },
+    aliexpresscom: {
+        'invoices': 'https://www.aliexpress.com/p/order/index.html'
+    },
+    auchantelecomfr: {
+        'invoices': 'https://www.auchantelecom.fr/fr/client/Consommations/Factures/Default.html'
     }
 }
 
@@ -74,39 +79,71 @@ let tab = null
 
 //TODO infinite download?!? with orange
 
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+function saveBlobAsPDF(blob, fileName) {
+    const reader = new FileReader();
+    reader.onload = function () {
+        const link = document.createElement('a');
+        link.href = reader.result;
+        link.download = fileName;
+        link.click();
+    };
+    reader.readAsDataURL(blob);
+}
+
+//cannot use async directly when returning response, see https://stackoverflow.com/questions/44056271
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     switch (request.action) {
         case 'downloadInvoices':
-            downloadInvoices(request)
-            chrome.tabs.remove(tab.id)
+            downloadInvoices(request).then(_ =>
+                chrome.tabs.remove(tab.id)
+            )
             break
         case 'downloadInvoicesOpenAi': //TODO find a more readable way
             downloadInvoices(request, async invoice => {
                 const response = await fetch(invoice.url)
                 const item = await response.json()
                 invoice.url = item.file_url
-            })
-            chrome.tabs.remove(tab.id)
+            }).then(_ =>
+                chrome.tabs.remove(tab.id)
+            )
             break
         case 'clickpopup':
-            const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true }) //{active: true, currentWindow: true})
-            tab = tabs[0]
-            const sellerKey = request.seller
-            const sellerUrl = URLS[sellerKey]
+            (async () => {
+                const tabs = await chrome.tabs.query({active: true, lastFocusedWindow: true}) //{active: true, currentWindow: true})
+                tab = tabs[0]
+                const sellerKey = request.seller
+                const sellerUrl = URLS[sellerKey]
 
-            // update current tab if its "new tab" or current seller website
-            if(tab.url === "chrome://newtab/" || tab.url.startsWith((new URL(sellerUrl.invoices)).origin))
-                tab = await chrome.tabs.update({url: sellerUrl.invoices})
-            else
-                tab = await chrome.tabs.create({url: sellerUrl.invoices})
+                // update current tab if its "new tab" or current seller website
+                if (tab.url === "chrome://newtab/" || tab.url.startsWith((new URL(sellerUrl.invoices)).origin))
+                    tab = await chrome.tabs.update({url: sellerUrl.invoices})
+                else
+                    tab = await chrome.tabs.create({url: sellerUrl.invoices})
 
-            const tabId = tab.id //important to copy, because below I want the current tabId, not the future current tabId
+                const tabId = tab.id //important to copy, because below I want the current tabId, not the future current tabId
 
-            console.log('clickpop', tabId)
+                console.log('clickpop', tabId)
 
-            injectSellerScriptOnCompleted(sellerKey, sellerUrl, tabId)
-
+                injectSellerScriptOnCompleted(sellerKey, sellerUrl, tabId)
+            })();
             break;
+
+        case 'getLocalStorageDownloadedInvoices':
+            (async () => {
+                const storage = await chrome.storage.local.get({downloadedInvoices: []})
+                sendResponse({result: storage})
+            })()
+            return true
+
+        case 'addLocalStorageDownloadedInvoices':
+            (async () => {
+                const {total, added} = request.data //added is fn list
+                const {downloadedInvoices} = await chrome.storage.local.get({downloadedInvoices: []})
+                downloadedInvoices.push(...added)
+                chrome.storage.local.set({downloadedInvoices: downloadedInvoices})
+                console.log('downloadInvoices end','Found', total.length, 'New', added.length)
+            })()
+            return true
     }
 })
 
@@ -157,32 +194,4 @@ function replayXhr(tabId) {
         {urls: ["<all_urls>"]},
         ["requestHeaders"]
     );
-}
-
-
-function monkeyPatchXHR() {
-    console.log('injecting')
-    window.toto = () => console.log('toto')
-    (function() {
-        console.log('injecting2')
-        window.toto = () => console.log('toto2')
-        const originalOpen = XMLHttpRequest.prototype.open;
-        const originalSend = XMLHttpRequest.prototype.send;
-
-        XMLHttpRequest.prototype.open = function(method, url, ...rest) {
-            this._url = url;  // Save the URL for later use
-            return originalOpen.call(this, method, url, ...rest);
-        };
-
-        XMLHttpRequest.prototype.send = function(body) {
-            this.addEventListener('load', function() {
-                console.log('intercept', this)
-                // if (this.responseType === '' || this.responseType === 'text') {
-                //     console.log('XHR URL:', this._url);
-                //     console.log('XHR Response:', this.responseText);
-                // }
-            });
-            return originalSend.call(this, body);
-        };
-    })();
 }
