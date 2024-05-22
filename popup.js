@@ -1,4 +1,4 @@
 document.querySelectorAll('#btn button').forEach(elt => elt.addEventListener('click', e => {
-    const seller = e.target.getAttribute('data-seller')
-    chrome.runtime.sendMessage({action: 'clickpopup', seller})
+    const supplier = e.target.getAttribute('data-supplier')
+    chrome.runtime.sendMessage({action: 'clickpopup', supplier})
 }))
