@@ -82,7 +82,7 @@ async function downloadFormData(url, fn, inputName, inputValue) {
 
 
 async function getLocalStorageDownloadedInvoices() {
-    const {downloadedInvoices} = await callBackgroundFunction('getLocalStorageDownloadedInvoices')
+    const downloadedInvoices = await callBackgroundFunction('getLocalStorageDownloadedInvoices')
     return downloadedInvoices ?? []
 }
 

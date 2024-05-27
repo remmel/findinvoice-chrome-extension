@@ -75,5 +75,5 @@ async function fetchInvoices() {
         })
     }
 
-    chrome.runtime.sendMessage({action: 'downloadInvoices', invoices, headers: [{"x-orange-caller-id": "ECQ"}]})
+    msg_downloadInvoices(invoices, [{"x-orange-caller-id": "ECQ"}])
 }

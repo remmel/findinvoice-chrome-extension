@@ -1,5 +1,5 @@
 import { convertAssoc, sleep } from "./utils.js"
-import { ReplayXhr } from "./utilsInterceptResponse.js"
+
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installed.")
 });
@@ -10,6 +10,9 @@ const URLS = {
     },
     auchantelecomfr: {
         'invoices': 'https://www.auchantelecom.fr/fr/client/Consommations/Factures/Default.html'
+    },
+    helloassocom:{
+        'invoices': 'https://www.helloasso.com/utilisateur/historique'
     },
     mobilefreefr: {
         'invoices': 'https://mobile.free.fr/account/conso-et-factures'
@@ -22,18 +25,18 @@ const URLS = {
     },
 }
 
-function injectContentScript(tabId, filename) {
+function injectContentScript(tabId, files) {
     return chrome.scripting.executeScript({
         target: { tabId },
-        files: [filename]
+        files: files
     });
 }
 
-function injectScriptOnCompleted(path, supplierUrl, tabId) {
+function injectScriptOnCompleted(files, supplierUrl, tabId) {
     chrome.webNavigation.onCompleted.addListener(e => {
         if(e.tabId === tabId && e.frameId ===0) {
-            console.log('onComplete', e, tabId, path)
-            injectContentScript(tabId, path)
+            console.log('onComplete', e, tabId, files)
+            injectContentScript(tabId, files)
         }
     }, {
         // url: [{hostEquals: new URL(supplierUrl.invoices).hostname}], //openai, multiple hosts pay/chat
@@ -45,23 +48,21 @@ function injectScriptOnCompleted(path, supplierUrl, tabId) {
 
 
 async function downloadInvoices(invoices, headers, preDownload=() =>{}) {
-    // await chrome.storage.local.clear()
-    const downloadedInvoices = (await chrome.storage.local.get({downloadedInvoices: []})).downloadedInvoices
     let newInvoices = 0
     for(const invoice of invoices) {
-        const filename = invoice.fn ?? null;
         const key = invoice.fn ?? invoice.id //to be improved prepending here the provider?
 
-        if (downloadedInvoices.includes(key)) continue //already downloaded
+        if(await Cache.hasInvoice(key)) continue //already downloaded
 
         const headersNV = convertAssoc(headers)
 
         await preDownload(invoice)
 
         await chrome.downloads.download({url: invoice.url, filename: invoice.fn, headers: headersNV})
-        downloadedInvoices.push(key)
-        chrome.storage.local.set({downloadedInvoices: downloadedInvoices})
+
+        await Cache.addInvoices([key])
         newInvoices++
+        // await sleep(50) //to avoid being caught as robot, specially with helloasso
     }
     console.log('downloadInvoices end','Found', invoices.length, 'New', newInvoices)
 }
@@ -106,50 +107,54 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case 'downloadInvoicesNewTab':
             (async () => {
                 const {invoices, supplierKey} = request.data //TODO use same url than
-                const downloadedInvoices = (await chrome.storage.local.get({downloadedInvoices: []})).downloadedInvoices
                 let newInvoices = 0
                 for(const invoice of invoices) {
                     const key = invoice.fn //TODO figure out
-                    if (downloadedInvoices.includes(key)) continue //already downloaded
+                    if(await Cache.hasInvoice(key)) continue //already downloaded
 
                     const {url} = invoice
                     const subtab = await chrome.tabs.create({url}) //, active: false}) //must be active for autoclose
-                    injectScriptOnCompleted(`suppliers/${supplierKey}_content.js`, url, subtab.id)
+                    injectScriptOnCompleted([`content/utils.js`,`suppliers/${supplierKey}_content.js`], url, subtab.id)
 
                     await sleep(2000) //avoid opening too many tabs
                     //could also close here the tab
                     //could also check here if the window has been properly opened
-                    downloadedInvoices.push(key)
+                    //FIXME better listen for download event to mark as downloaded!
+                    Cache.addInvoices([key])
                     newInvoices++
                 }
 
                 console.log('downloadInvoices end','Found', invoices.length, 'New', newInvoices)
 
-                //FIXME better listen for download event to mark as downloaded!
-                chrome.storage.local.set({downloadedInvoices: downloadedInvoices})
                 chrome.tabs.remove(tab.id)
             })()
             return true
-        case 'clickpopup':
+        case 'popup-select-supplier':
             loadSupplierUrlAndInject(request.supplier)
             break;
 
-        case 'getLocalStorageDownloadedInvoices':
+        case 'storage-clear':
             (async () => {
-                const storage = await chrome.storage.local.get({downloadedInvoices: []})
-                sendResponse({result: storage})
+                console.log('cache clear in async')
+                await Cache.clear()
+                sendResponse(true)
             })()
             return true
+
+
+        case 'getLocalStorageDownloadedInvoices':
+            (async () => {
+                const downloadedInvoices = await Cache.getInvoices()
+                sendResponse({result: downloadedInvoices})
+            })()
+            return true //true if uses sendResponse
 
         case 'addLocalStorageDownloadedInvoices':
             (async () => {
                 const {total, added} = request.data //added is fn list
-                const {downloadedInvoices} = await chrome.storage.local.get({downloadedInvoices: []})
-                downloadedInvoices.push(...added)
-                chrome.storage.local.set({downloadedInvoices: downloadedInvoices})
-                console.log('downloadIenfrnvoices end','Found', total.length, 'New', added.length)
+                await Cache.addInvoices(added)
+                console.log('downloadInvoices end','Found', total.length, 'New', added.length)
             })()
-            return true
     }
 })
 
@@ -168,6 +173,31 @@ async function loadSupplierUrlAndInject(supplierKey) {
 
     console.log('clickpop', tabId)
 
-    injectScriptOnCompleted(`suppliers/${supplierKey}_content.js`, supplierUrl, tabId)
+    injectScriptOnCompleted([`content/utils.js`, `suppliers/${supplierKey}_content.js`], supplierUrl, tabId)
 }
 
+
+class Cache{
+    static async getInvoices(){
+       return (await chrome.storage.local.get({downloadedInvoices: []})).downloadedInvoices
+    }
+
+    static async addInvoices(keys) {
+        let invoices = await this.getInvoices()
+        invoices.push(...keys)
+        await chrome.storage.local.set({downloadedInvoices: invoices})
+    }
+
+    static async clear() {
+        await chrome.storage.local.clear() //(await chrome.storage.local.remove
+    }
+
+    static async hasInvoice(key) {
+        const invoices = await this.getInvoices()
+        return invoices.includes(key)
+    }
+
+    //chrome.storage.local.set({downloadedInvoices: downloadedInvoices})
+
+    // async static setInvoc
+}

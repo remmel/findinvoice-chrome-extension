@@ -1,14 +1,5 @@
 console.log("aliexpresscom")
 
-const sleep = ms => new Promise(r => setTimeout(r, ms))
-
-const maxWait = ms => promise =>
-    Promise.race([sleep(ms), promise])
-
-function waitForElementChangeWithMaxWait(selector, maxWaitTime) {
-    return Promise.race([waitForElementChange(selector), sleep(maxWaitTime)])
-}
-
 function getMoreEl() {
     return document.querySelector('.order-more button')
 }
@@ -96,7 +87,7 @@ async function mainOrdersList() {
     const maxCount = 0 //mean we should get 10+maxCount*10
     for (let i = 0; i < maxCount && getMoreEl(); i++) { // get max 60 order until no more
         getMoreEl().click()
-        await waitForElementChangeWithMaxWait('.order-main', 5000)
+        await waitForElementChange('.order-main', 5000)
         let count = document.querySelectorAll('.order-item').length
         if (count !== prevCount + 10)
             console.log(i, 'missing order', prevCount + 10 - count)
@@ -125,39 +116,6 @@ async function mainOrdersList() {
     // }
 }
 
-
-async function waitForElementChange(selector) {
-    return new Promise((resolve, reject) => {
-        // Select the target node
-        const targetNode = document.querySelector(selector)
-
-        // Ensure the target node exists
-        if (!targetNode) {
-            // return reject(new Error(`Element not found for selector: ${selector}`));
-            return resolve()
-        }
-
-        // Create a mutation observer instance
-        const observer = new MutationObserver((mutationsList, observer) => {
-            // Resolve the promise when changes are observed
-            resolve(mutationsList);
-
-            // Optionally disconnect the observer if you only want to detect the first change
-            observer.disconnect();
-        });
-
-        // Configuration of the observer
-        const config = {
-            attributes: true,      // Observe attribute changes
-            childList: true,       // Observe addition/removal of child nodes
-            subtree: true,         // Observe changes to all descendants
-            characterData: true    // Observe changes to the text content
-        };
-
-        // Start observing the target node for configured mutations
-        observer.observe(targetNode, config);
-    });
-}
 
 function getDlButtonEl() {
     const invoiceKeywords = ['Download invoice', 'Descargar factura', 'Télécharger facture']

@@ -20,19 +20,21 @@
   "action": {
     "default_popup": "popup.html"
   },
+  "options_page": "options.html",
   "host_permissions": [
     "https://mobile.free.fr/*",
     "https://espace-client.orange.fr/*",
     "https://*.openai.com/*",
     "https://*.stripe.com/*",
     "https://*.auchantelecom.fr/*",
-    "https://*.aliexpress.com/*"
+    "https://*.aliexpress.com/*",
+    "https://www.helloasso.com/*"
   ],
   "icons": {
     "128": "icon128.png"
   },
   "web_accessible_resources": [{
-    "resources": ["content/monkeyPatchFetch.js"],
+    "resources": ["content/monkeyPatchFetch.js", "content/utils.js"],
     "matches": ["<all_urls>"]
   }]
 }

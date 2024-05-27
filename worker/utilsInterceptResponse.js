@@ -29,7 +29,7 @@ function interceptXhrResponseUsingDebugger(tabId, urlStarts) {
 }
 
 // response is empty
-function interceptXhrResponseUsingDebugger2(tabId) {
+export function interceptXhrResponseUsingDebugger2(tabId, urlPattern = '<all_urls>') {
     chrome.webRequest.onCompleted.addListener(
         function (details) {
             // Filter for XHR requests
@@ -45,9 +45,11 @@ function interceptXhrResponseUsingDebugger2(tabId) {
                 });
             }
         },
-        {urls: ["*://*.openai.com/*"]}
+        {urls: [urlPattern]}
     );
 }
+
+//could be possible when devtools is opened via https://developer.chrome.com/docs/extensions/reference/api/devtools/network (cannot be opened automatically)
 
 
 export class ReplayXhr {

@@ -25,76 +25,255 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="2.515625"
-     inkscape:cx="47.900621"
-     inkscape:cy="108.12422"
+     inkscape:zoom="3.557631"
+     inkscape:cx="60.855103"
+     inkscape:cy="18.832757"
      inkscape:window-width="1920"
-     inkscape:window-height="1051"
-     inkscape:window-x="0"
+     inkscape:window-height="1001"
+     inkscape:window-x="1920"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg18" />
-  <g
-     id="g1902">
-    <rect
-       x="16"
-       y="16"
-       width="96"
-       height="96"
-       rx="8"
-       ry="8"
-       fill="#e0e0e0"
-       stroke="#000"
-       stroke-width="2"
-       id="rect2" />
-    <rect
-       x="32"
-       y="32"
-       width="64"
-       height="16"
-       fill="#ffffff"
-       stroke="#000"
-       stroke-width="2"
-       id="rect4" />
-    <rect
-       x="32"
-       y="56"
-       width="40"
-       height="8"
-       fill="#ffffff"
-       stroke="#000"
-       stroke-width="2"
-       id="rect6" />
-    <rect
-       x="32"
-       y="72"
-       width="40"
-       height="8"
-       fill="#ffffff"
-       stroke="#000"
-       stroke-width="2"
-       id="rect8" />
-    <rect
-       x="32"
-       y="88"
-       width="40"
-       height="8"
-       fill="#ffffff"
-       stroke="#000"
-       stroke-width="2"
-       id="rect10" />
-    <rect
-       x="32"
-       y="104"
-       width="64"
-       height="8"
-       fill="#ffffff"
-       stroke="#000"
-       stroke-width="2"
-       id="rect12" />
-  </g>
   <path
      id="polygon16"
      style="fill:#ff0000;stroke:#000000;stroke-width:2.67754;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 57.306161,22.521629 V 84.842314 H 43.918483 L 63.999999,104.92383 84.081516,84.842314 H 70.693838 V 22.521629 Z" />
+     d="m -210.13949,-127.13093 v 62.320682 h -13.38768 l 20.08152,20.081516 20.08151,-20.081516 h -13.38767 v -62.320682 z" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     d="m 5.5223678,101.39088 v 21.07136 H 122.47763 v -20.97705"
+     id="path1089"
+     sodipodi:nodetypes="cccc" />
+  <g
+     id="g10631"
+     transform="translate(-138.05483,-20.768561)">
+    <rect
+       x="22.462193"
+       y="7.3253784"
+       width="83.075615"
+       height="101.51694"
+       rx="8"
+       ry="8"
+       fill="#e0e0e0"
+       stroke="#000000"
+       stroke-width="2"
+       id="rect2" />
+    <rect
+       x="28.938484"
+       y="15.908623"
+       width="70"
+       height="10"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="1.47649"
+       id="rect4"
+       style="fill:#1a1a1a;stroke:none" />
+    <rect
+       x="30.18243"
+       y="34.628963"
+       width="41.576538"
+       height="7.4868698"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.51313"
+       id="rect6"
+       style="fill:#000000;stroke:#000000" />
+    <rect
+       x="30.270077"
+       y="54.697666"
+       width="42.27713"
+       height="7.3368111"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.66319"
+       id="rect8"
+       style="fill:#000000;stroke:#000000" />
+    <rect
+       x="30.270077"
+       y="74.240219"
+       width="66.824493"
+       height="7.3368149"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.66319"
+       id="rect10"
+       style="fill:#000000;stroke:#000000" />
+    <rect
+       x="29.965382"
+       y="93.935524"
+       width="67.946205"
+       height="7.9462032"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.0538"
+       id="rect12"
+       style="fill:#000000;stroke:#000000" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:53.3333px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
+       x="73.540031"
+       y="68.919838"
+       id="text5419"><tspan
+         sodipodi:role="line"
+         id="tspan5417"
+         x="73.540031"
+         y="68.919838"
+         style="font-size:53.3333px">$</tspan></text>
+  </g>
+  <rect
+     x="20.430332"
+     y="-39.932785"
+     width="70"
+     height="10"
+     fill="#ffffff"
+     stroke="#000000"
+     stroke-width="1.47649"
+     id="rect10609"
+     style="fill:#1a1a1a;stroke:none" />
+  <rect
+     x="25.703684"
+     y="-21.753056"
+     width="18.503641"
+     height="7.4868698"
+     fill="#ffffff"
+     stroke="#000000"
+     stroke-width="2.51313"
+     id="rect10611"
+     style="fill:#000000;stroke:#000000" />
+  <rect
+     x="127.05744"
+     y="-43.91412"
+     width="49.772568"
+     height="7.3368111"
+     fill="#ffffff"
+     stroke="#000000"
+     stroke-width="2.66319"
+     id="rect10613"
+     style="fill:#000000;stroke:#000000" />
+  <rect
+     x="130.67549"
+     y="-94.406921"
+     width="67.946205"
+     height="7.9462032"
+     fill="#ffffff"
+     stroke="#000000"
+     stroke-width="2.0538"
+     id="rect10617"
+     style="fill:#000000;stroke:#000000" />
+  <g
+     id="g19660"
+     transform="translate(3.4339561)">
+    <rect
+       x="26.85923"
+       y="15.513827"
+       width="67.413628"
+       height="86.37352"
+       rx="8"
+       ry="8"
+       fill="#e0e0e0"
+       stroke="#000000"
+       stroke-width="2"
+       id="rect10607"
+       style="stroke:#000000" />
+    <rect
+       x="34.335762"
+       y="24.246025"
+       width="52.842873"
+       height="2.8512452"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.14875"
+       id="rect10615"
+       style="fill:#666666;stroke:#666666" />
+    <rect
+       x="34.335762"
+       y="48.725548"
+       width="49.985283"
+       height="2.8512459"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.14875"
+       id="rect19511"
+       style="fill:#666666;stroke:#666666" />
+    <rect
+       x="34.335762"
+       y="73.425255"
+       width="52.842873"
+       height="2.8512452"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.14875"
+       id="rect19513"
+       style="fill:#666666;stroke:#666666" />
+    <rect
+       x="34.335762"
+       y="61.120907"
+       width="49.52124"
+       height="2.8512459"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.14875"
+       id="rect19515"
+       style="fill:#666666;stroke:#666666" />
+    <rect
+       x="34.335762"
+       y="88.361275"
+       width="52.842873"
+       height="2.8512452"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.14875"
+       id="rect19517"
+       style="fill:#666666;stroke:#666666" />
+    <rect
+       x="34.335762"
+       y="36.725548"
+       width="47.692333"
+       height="2.8512459"
+       fill="#ffffff"
+       stroke="#000000"
+       stroke-width="2.14875"
+       id="rect19618"
+       style="fill:#666666;stroke:#666666" />
+  </g>
+  <g
+     id="g18915"
+     transform="matrix(0.88231786,0,0,0.88231786,6.7633136,-2.4291911)">
+    <circle
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:15.9494;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.997892;paint-order:stroke fill markers"
+       id="path13356"
+       cx="100.27242"
+       cy="28.723797"
+       r="25.314127" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:60px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none"
+       x="84.548668"
+       y="50.566299"
+       id="text13796"><tspan
+         sodipodi:role="line"
+         id="tspan13794"
+         x="84.548668"
+         y="50.566299"
+         style="font-weight:bold;font-size:60px">$</tspan></text>
+  </g>
+  <g
+     id="g10878"
+     transform="translate(-155.74651,22.191541)"
+     style="stroke:#800000">
+    <g
+       id="g10736"
+       transform="matrix(0.75963204,0,0,0.75963204,352.21693,18.218746)"
+       style="stroke:#800000;stroke-width:18.4846;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers">
+      <path
+         style="fill:none;stroke:#800000;stroke-width:19.7464;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         d="M -176.10229,-36.404552 V 83.251456"
+         id="path10732"
+         sodipodi:nodetypes="cc" />
+      <path
+         style="fill:none;stroke:#800000;stroke-width:19.7464;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+         d="m -219.99408,39.359666 43.89179,43.89179 43.89305,-43.89305"
+         id="path10734"
+         sodipodi:nodetypes="ccc" />
+    </g>
+  </g>
 </svg>
