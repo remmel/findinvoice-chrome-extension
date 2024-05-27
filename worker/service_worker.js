@@ -147,14 +147,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 const downloadedInvoices = await Cache.getInvoices()
                 sendResponse({result: downloadedInvoices})
             })()
-            return true //true if uses sendResponse
+            return true //true if uses sendResponse, must sendResponse back to properly use await
 
         case 'addLocalStorageDownloadedInvoices':
             (async () => {
                 const {total, added} = request.data //added is fn list
                 await Cache.addInvoices(added)
                 console.log('downloadInvoices end','Found', total.length, 'New', added.length)
+                sendResponse(true)
             })()
+            return true
     }
 })
 

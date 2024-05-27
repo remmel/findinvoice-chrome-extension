@@ -1,5 +1,7 @@
 import { LitElement, html, css } from '../lib/lit-core.min.js'
 
+const sleep = ms => new Promise(r => setTimeout(r, ms))
+
 class CacheListComponent extends LitElement {
     static get properties() {
         return {
@@ -18,11 +20,13 @@ class CacheListComponent extends LitElement {
     }
 
     async loadInvoices() {
-        this.invoices = (await msg_getlocalstroagedlinvoices()).reverse()
+        this.invoices = (await msg_getlocalstroagedlinvoices())
     }
 
     handleAddInvoice() {
-        const invoicesKeys = ['2024-05-21_dumb_9.33.pdf']
+        const min = 5.00, max = 500.00
+        const price =  (Math.random() * (max - min) + min).toFixed(2);
+        const invoicesKeys = ['2024-05-21_dumb_'+price+'.pdf']
         msg_addlocalstroageinvoice(invoicesKeys, invoicesKeys).then(_ => this.loadInvoices())
     }
 
@@ -30,22 +34,33 @@ class CacheListComponent extends LitElement {
         msg_storageClear().then(_ => this.loadInvoices())
     }
 
+    async handleRemoveInvoice(key) {
+        const invoices2 = this.invoices.filter(v => v !==key)
+        await msg_storageClear()
+        await msg_addlocalstroageinvoice(invoices2, invoices2)
+        await this.loadInvoices()
+    }
+
     render() {
         return html`
-            <h2>Download invoice / cache</h2>
+            <h2>Cached downloaded invoice</h2>
             <button @click=${this.handleClearInvoice}>🗑️ Clear cache</button>
             <button @click=${this.handleAddInvoice}>+ Add test</button>
             <table>
                 <thead>
                 <tr>
                     <th>Invoice Filename</th>
+                    <th>🗑️</th>
                 </tr>
                 </thead>
                 <tbody>
-                ${this.invoices.map(
+                
+                ${this.invoices.slice().reverse().map(
                         invoice => html`
                             <tr>
                                 <td>${invoice}</td>
+                                <td><button @click=${() => this.handleRemoveInvoice(invoice)}>❌</button></td>
+                                
                             </tr>
                         `
                 )}
