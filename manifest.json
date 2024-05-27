@@ -18,9 +18,9 @@
     "type": "module"
   },
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "ui/popup.html"
   },
-  "options_page": "options.html",
+  "options_page": "ui/options.html",
   "host_permissions": [
     "https://mobile.free.fr/*",
     "https://espace-client.orange.fr/*",

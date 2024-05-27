@@ -39,5 +39,10 @@ logged -> logged: dlInvoices()
 @enduml
 ```
 
+#JS Framework
+
+Lit is used, because no transpiler is needed (contrary to react).
+Note that preact standalone could have been used https://preactjs.com/guide/v10/getting-started/#alternatives-to-jsx and https://github.com/developit/htm
+
 
 https://developer.chrome.com/docs/extensions/samples
