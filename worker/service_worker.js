@@ -1,29 +1,8 @@
-import { convertAssoc, sleep } from "./utils.js"
+import { convertAssoc, sleep, SELLERS, getStartDate } from "./utils.js"
 
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installed.")
-});
-
-const URLS = {
-    aliexpresscom: {
-        'invoices': 'https://www.aliexpress.com/p/order/index.html',
-    },
-    auchantelecomfr: {
-        'invoices': 'https://www.auchantelecom.fr/fr/client/Consommations/Factures/Default.html'
-    },
-    helloassocom:{
-        'invoices': 'https://www.helloasso.com/utilisateur/historique'
-    },
-    mobilefreefr: {
-        'invoices': 'https://mobile.free.fr/account/conso-et-factures'
-    },
-    openaicom: {
-        'invoices': 'https://chat.openai.com/account/manage' //https://pay.openai.com/
-    },
-    orangefr: {
-        'invoices': 'https://espace-client.orange.fr/facture-paiement/'
-    },
-}
+})
 
 function injectContentScript(tabId, files) {
     return chrome.scripting.executeScript({
@@ -49,9 +28,11 @@ function injectScriptOnCompleted(files, supplierUrl, tabId) {
 
 async function downloadInvoices(invoices, headers, preDownload=() =>{}) {
     let newInvoices = 0
+    const startDate = await getStartDate()
     for(const invoice of invoices) {
         const key = invoice.fn ?? invoice.id //to be improved prepending here the provider?
 
+        if(startDate !== null && startDate > invoice.date) continue
         if(await Cache.hasInvoice(key)) continue //already downloaded
 
         const headersNV = convertAssoc(headers)
@@ -64,7 +45,7 @@ async function downloadInvoices(invoices, headers, preDownload=() =>{}) {
         newInvoices++
         // await sleep(50) //to avoid being caught as robot, specially with helloasso
     }
-    console.log('downloadInvoices end','Found', invoices.length, 'New', newInvoices)
+    console.log('downloadInvoices','Found', invoices.length, 'New/Recent', newInvoices, invoices)
 }
 
 
@@ -108,8 +89,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             (async () => {
                 const {invoices, supplierKey} = request.data //TODO use same url than
                 let newInvoices = 0
+                const startDate = await getStartDate()
                 for(const invoice of invoices) {
                     const key = invoice.fn //TODO figure out
+                    if(startDate !== null && startDate > invoice.date) continue
                     if(await Cache.hasInvoice(key)) continue //already downloaded
 
                     const {url} = invoice
@@ -124,7 +107,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     newInvoices++
                 }
 
-                console.log('downloadInvoices end','Found', invoices.length, 'New', newInvoices)
+                console.log('downloadInvoices','Found', invoices.length, 'New/Recent', newInvoices, invoices)
 
                 chrome.tabs.remove(tab.id)
             })()
@@ -163,7 +146,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function loadSupplierUrlAndInject(supplierKey) {
     const tabs = await chrome.tabs.query({active: true, lastFocusedWindow: true}) //{active: true, currentWindow: true})
     tab = tabs[0]
-    const supplierUrl = URLS[supplierKey]
+    const supplierUrl = SELLERS[supplierKey]
 
     // update current tab if its "new tab" or current supplier website
     if (tab.url === "chrome://newtab/" || tab.url.startsWith((new URL(supplierUrl.invoices)).origin))

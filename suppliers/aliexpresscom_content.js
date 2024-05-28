@@ -108,7 +108,7 @@ async function mainOrdersList() {
     const mergedOrders = mergeOrder(orders)
     console.log(mergedOrders)
 
-    downloadInvoicesNewTab(orders, 'aliexpresscom')
+    msg_downloadInvoicesNewTab(orders, 'aliexpresscom')
 
     // for(const order of orders) {
     //     console.log(order)
@@ -162,30 +162,4 @@ if (window.location.href.startsWith('https://www.aliexpress.com/p/order/index.ht
     mainOrdersList()
 } else if (window.location.href.startsWith('https://www.aliexpress.com/p/order/detail.html')) {
     mainOrderDetail()
-}
-
-
-// async function getLocalStorageDownloadedInvoices() {
-//     const {downloadedInvoices} = await callBackgroundFunction('getLocalStorageDownloadedInvoices')
-//     return downloadedInvoices ?? []
-// }
-//
-// function addLocalStorageDownloadedInvoices(data) {
-//     callBackgroundFunction('addLocalStorageDownloadedInvoices', data)
-// }
-
-async function downloadInvoicesNewTab(invoices, supplierKey) {
-    callBackgroundFunction('downloadInvoicesNewTab', {invoices, supplierKey})
-}
-
-function callBackgroundFunction(action, data = null) {
-    return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ action, data }, response => {
-            // if (chrome.runtime.lastError) {
-            // reject(chrome.runtime.lastError)
-            // } else {
-            resolve(response.result)
-            // }
-        })
-    })
 }

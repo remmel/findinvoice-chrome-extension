@@ -1,4 +1,4 @@
-// currenlty, that utils.js is always injected aside ${supplier}_content.js, in the future,
+// currently, that utils.js is always injected aside ${supplier}_content.js, in the future,
 // we could think about using a packager to only provide what is needed
 // using module, and importScript
 // could try to reproduce similar API than https://pptr.dev/api/puppeteer.waitforselectoroptions
@@ -66,4 +66,18 @@ async function _waitForElementChange(selector) {
 
 const msg_downloadInvoices = function(invoices, headers = []) {
     chrome.runtime.sendMessage({action: 'downloadInvoices', invoices, headers})
+}
+
+const msg_downloadInvoicesNewTab = function(invoices, supplierKey) {
+    chrome.runtime.sendMessage({action: 'downloadInvoicesNewTab', data: {invoices, supplierKey}})
+}
+
+// const msg_storage_startDate = async function() {
+//     const result = await chrome.storage.sync.get({startDate: ''})
+// }
+
+async function getStartDate() {
+    const {startDate} = await chrome.storage.sync.get({startDate: ''})
+    console.log(startDate)
+    return startDate
 }

@@ -70,7 +70,12 @@ async function fetchInvoices() {
 
         bills.billsHistory.billList.forEach(bill => {
             let fn = `${bill.date}_orange_${bill.amount/100}.pdf`
-            invoices.push({url: 'https://espace-client.orange.fr/ecd_wp/facture/v1.0/pdf'+bill.hrefPdf, fn, id: bill.id})
+            invoices.push({
+                url: 'https://espace-client.orange.fr/ecd_wp/facture/v1.0/pdf' + bill.hrefPdf,
+                fn,
+                id: bill.id,
+                date: bill.date
+            })
             console.log(invoices)
         })
     }

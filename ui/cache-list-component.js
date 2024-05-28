@@ -1,7 +1,5 @@
 import { LitElement, html, css } from '../lib/lit-core.min.js'
 
-const sleep = ms => new Promise(r => setTimeout(r, ms))
-
 class CacheListComponent extends LitElement {
     static get properties() {
         return {

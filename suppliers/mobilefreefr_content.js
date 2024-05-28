@@ -21,10 +21,11 @@ if (window.location.href.startsWith('https://mobile.free.fr/account/v2/login')) 
         const year = dateParam.slice(0, 4)
         const month = dateParam.slice(4, 6)
         const day = dateParam.slice(6, 8)
-        const fn = `${year}-${month}-${day}_freemobile_${price}.pdf`
+        const date = `${year}-${month}-${day}`
+        const fn = `${date}_freemobile_${price}.pdf`
         const id = urlobj.searchParams.get('id') //to avoid redownloading
         //chrome.runtime.sendMessage({ action: 'downloadInvoice', url, fn, id })
-        invoices.push({url, fn, id})
+        invoices.push({url, fn, id, date})
     })
     chrome.runtime.sendMessage({action: 'downloadInvoices', invoices})
 }

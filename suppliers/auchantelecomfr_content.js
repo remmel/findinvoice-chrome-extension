@@ -44,10 +44,12 @@ async function main() {
     console.log(invoices)
 
     const localStorageDlInvoices = await getLocalStorageDownloadedInvoices()
+    const startDate = await startDate()
 
     const addedInvoices = []
-    for(const {url, fn, inputName, inputValue} of invoices) {
+    for(const {url, fn, date, inputName, inputValue} of invoices) {
         if(!localStorageDlInvoices.includes(fn)) {
+            if(startDate !== null && startDate > date) continue
             console.log('download', fn)
             downloadFormData(url, fn, inputName, inputValue) //could also just click on the link!
             addedInvoices.push(fn)

@@ -1,5 +1,4 @@
 console.log("openaicom")
-const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 function getViewMoreEl() {
     return Array.from(document.querySelectorAll('button'))
@@ -43,7 +42,7 @@ async function main() {
 
             // const response = await fetch(url) //blocked by cors policy
 
-            invoices.push({url, fn, id:null})
+            invoices.push({url, fn, id:null, date})
         }
         chrome.runtime.sendMessage({action: 'downloadInvoicesOpenAi', invoices})
     }

@@ -5,6 +5,7 @@
 import { LitElement, html, css } from '../lib/lit-core.min.js'
 import './settings-component.js'
 import './cache-list-component.js'
+import './suppliers-component.js'
 
 class OptionsApp extends LitElement {
     static get styles() {
@@ -18,6 +19,7 @@ class OptionsApp extends LitElement {
 
     render() {
         return html`
+            <suppliers-component></suppliers-component>
             <settings-component></settings-component>
             <cache-list-component></cache-list-component>
         `
