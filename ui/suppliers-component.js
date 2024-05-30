@@ -1,5 +1,5 @@
 import { LitElement, html, css } from '../lib/lit-core.min.js'
-import { SELLERS } from "../worker/utils.js"
+import { SUPPLIERS } from "../worker/utils.js"
 
 class SuppliersComponent extends LitElement {
     static get properties() {
@@ -10,7 +10,7 @@ class SuppliersComponent extends LitElement {
 
     constructor() {
         super()
-        this.suppliers = SELLERS
+        this.suppliers = SUPPLIERS
     }
 
     static styles = css`

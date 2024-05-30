@@ -38,6 +38,7 @@ async function _waitForElementChange(selector) {
 
         // Ensure the target node exists
         if (!targetNode) {
+            console.error(`Element not found for selector: ${selector}`)
             // return reject(new Error(`Element not found for selector: ${selector}`));
             return resolve()
         }
@@ -69,7 +70,7 @@ const msg_downloadInvoices = function(invoices, headers = []) {
 }
 
 const msg_downloadInvoicesNewTab = function(invoices, supplierKey) {
-    chrome.runtime.sendMessage({action: 'downloadInvoicesNewTab', data: {invoices, supplierKey}})
+    chrome.runtime.sendMessage({action: 'downloadInvoicesNewTab', invoices, supplierKey})
 }
 
 // const msg_storage_startDate = async function() {
@@ -78,6 +79,12 @@ const msg_downloadInvoicesNewTab = function(invoices, supplierKey) {
 
 async function getStartDate() {
     const {startDate} = await chrome.storage.sync.get({startDate: ''})
-    console.log(startDate)
     return startDate
+}
+
+
+const addStyle = styleString => {
+    const style = document.createElement('style')
+    style.textContent = styleString
+    document.head.append(style)
 }

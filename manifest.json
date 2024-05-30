@@ -28,7 +28,8 @@
     "https://*.stripe.com/*",
     "https://*.auchantelecom.fr/*",
     "https://*.aliexpress.com/*",
-    "https://www.helloasso.com/*"
+    "https://www.helloasso.com/*",
+    "https://www.leboncoin.fr/*"
   ],
   "icons": {
     "128": "icon128.png"
@@ -36,5 +37,21 @@
   "web_accessible_resources": [{
     "resources": ["content/monkeyPatchFetch.js", "content/utils.js"],
     "matches": ["<all_urls>"]
-  }]
+  }],
+  "content_scripts": [
+    {
+      "world": "ISOLATED",
+      "matches": ["https://www.leboncoin.fr/*"],
+      "js": ["content/utils.js","lib/jspdf.umd.min.js","suppliers/leboncoinfr_content_manifest.js"],
+      "run_at": "document_start"
+    },
+    {
+    "world": "MAIN",
+    "matches": ["https://www.leboncoin.fr/*"],
+    "js": ["content/utils.js","content/monkeyPatchFetch.js", "suppliers/leboncoinfr_content_world.js"],
+    "run_at": "document_start"
+  }],
+  "externally_connectable": {
+    "matches": ["https://www.leboncoin.fr/*"]
+  }
 }

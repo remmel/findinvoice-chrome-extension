@@ -19,7 +19,7 @@ export function convertAssoc(headers) {
 }
 
 
-export const SELLERS = {
+export const SUPPLIERS = {
     aliexpresscom: {
         invoices: 'https://www.aliexpress.com/p/order/index.html',
         label: 'Aliexpress'
@@ -44,12 +44,15 @@ export const SELLERS = {
         invoices: 'https://espace-client.orange.fr/facture-paiement/',
         label: 'Orange (fr)'
     },
+    leboncoinfr: {
+        invoices: 'https://www.leboncoin.fr/compte/part/mes-transactions',
+        label: 'Leboncoin'
+    }
 }
 
 // duplicated code
 export async function getStartDate() {
     const {startDate} = await chrome.storage.sync.get({startDate: ''})
-    console.log(startDate)
     return startDate
 }
 

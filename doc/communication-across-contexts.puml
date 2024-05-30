@@ -1,0 +1,16 @@
+@startuml
+participant worker as worker
+participant webpage_world_isolated as webpageisolated
+participant webpage_world_main as webpagemain
+worker -> webpageisolated: chrome.runtime.sendMessage({x})
+webpageisolated --> worker: response
+webpageisolated -> worker: chrome.runtime.sendMessage({x})
+worker --> webpageisolated: response
+
+webpagemain -> worker: chrome.runtime.sendMessage(extensionId, {x}}\nmanifest: "externally_connectable": {"matches": [x]}
+worker -> worker: chrome.runtime.onMessageExternal.addListener
+worker --> webpagemain: response
+
+webpagemain -> webpageisolated: document.dispatchEvent(new CustomEvent({x}))
+webpageisolated -> webpageisolated: document.addEventListener()
+@enduml

@@ -1,4 +1,4 @@
-import { convertAssoc, sleep, SELLERS, getStartDate } from "./utils.js"
+import { convertAssoc, sleep, SUPPLIERS, getStartDate } from "./utils.js"
 
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installed.")
@@ -48,6 +48,36 @@ async function downloadInvoices(invoices, headers, preDownload=() =>{}) {
     console.log('downloadInvoices','Found', invoices.length, 'New/Recent', newInvoices, invoices)
 }
 
+/**
+ * @param invoices
+ * @param supplierKey, if non, the supplier content js won't be injected. In the future use register instead
+ * @returns {Promise<void>}
+ */
+async function downloadInvoiceNewTab(invoices, supplierKey = null) {
+    let newInvoices = 0
+    const startDate = await getStartDate()
+    for(const {fn, url, date} of invoices) {
+        if(startDate !== null && startDate > date) continue
+        if(await Cache.hasInvoice(fn)) continue //already downloaded
+
+        const subtab = await chrome.tabs.create({url}) //, active: false}) //must be active for autoclose
+        if(supplierKey)
+            injectScriptOnCompleted([`content/utils.js`,`suppliers/${supplierKey}_content.js`], url, subtab.id)
+
+        await sleep(2000) //avoid opening too many tabs
+        //could also close here the tab
+        //could also check here if the window has been properly opened
+        //FIXME better listen for download event to mark as downloaded!
+        Cache.addInvoices([fn])
+        newInvoices++
+    }
+
+    console.log('downloadInvoices','Found', invoices.length, 'New/Recent', newInvoices, invoices)
+
+    if(tab)
+        chrome.tabs.remove(tab.id)
+}
+
 
 let tab = null
 
@@ -86,31 +116,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
             break
         case 'downloadInvoicesNewTab':
-            (async () => {
-                const {invoices, supplierKey} = request.data //TODO use same url than
-                let newInvoices = 0
-                const startDate = await getStartDate()
-                for(const invoice of invoices) {
-                    const key = invoice.fn //TODO figure out
-                    if(startDate !== null && startDate > invoice.date) continue
-                    if(await Cache.hasInvoice(key)) continue //already downloaded
-
-                    const {url} = invoice
-                    const subtab = await chrome.tabs.create({url}) //, active: false}) //must be active for autoclose
-                    injectScriptOnCompleted([`content/utils.js`,`suppliers/${supplierKey}_content.js`], url, subtab.id)
-
-                    await sleep(2000) //avoid opening too many tabs
-                    //could also close here the tab
-                    //could also check here if the window has been properly opened
-                    //FIXME better listen for download event to mark as downloaded!
-                    Cache.addInvoices([key])
-                    newInvoices++
-                }
-
-                console.log('downloadInvoices','Found', invoices.length, 'New/Recent', newInvoices, invoices)
-
-                chrome.tabs.remove(tab.id)
-            })()
+            const {invoices, supplierKey} = request
+            downloadInvoiceNewTab(invoices, supplierKey)
             return true
         case 'popup-select-supplier':
             loadSupplierUrlAndInject(request.supplier)
@@ -143,10 +150,31 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 })
 
+chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
+    switch (request.action) {
+        case 'startDate':
+            (async () => {
+                const startDate = await getStartDate()
+                sendResponse(startDate)
+            })()
+            return true
+
+        case 'downloadInvoicesNewTab':
+            (async () => {
+                const {invoices} = request
+                await downloadInvoiceNewTab(invoices)
+                sendResponse(true)
+            })()
+            return true
+    }
+})
+
+
+
 async function loadSupplierUrlAndInject(supplierKey) {
     const tabs = await chrome.tabs.query({active: true, lastFocusedWindow: true}) //{active: true, currentWindow: true})
     tab = tabs[0]
-    const supplierUrl = SELLERS[supplierKey]
+    const supplierUrl = SUPPLIERS[supplierKey]
 
     // update current tab if its "new tab" or current supplier website
     if (tab.url === "chrome://newtab/" || tab.url.startsWith((new URL(supplierUrl.invoices)).origin))

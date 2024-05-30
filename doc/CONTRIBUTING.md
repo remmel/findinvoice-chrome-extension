@@ -6,7 +6,6 @@ Will have to figure out for a "framework" later:
 - automatically inject the code of a supplier (manifest.json > content_scripts)
 - who lead the logic (worker vs tab), knowing that specific action can only be performed on one or the other
 
-
 # Dev notes for myself
 If I don't want to click on the popup button multiple times (when not connected to free.fr), 2 solutions:
 
@@ -28,6 +27,7 @@ If I don't want to click on the popup button multiple times (when not connected 
 
 - no autologin with Google Password Manager : a tab opened by that extension, won't have the field filled by Google Password if no interaction from the user (workaround is to store the password)
 # Diagrams
+
 ```plantuml
 @startuml
 User -> login: Click
@@ -38,6 +38,19 @@ login -> logged
 logged -> logged: dlInvoices()
 @enduml
 ```
+
+<details>
+
+```
+@startuml firstDiagram
+
+Alice -> Bob: Hello
+Bob -> Alice: Hi!
+		
+@enduml
+```
+
+</details>
 
 #JS Framework
 
