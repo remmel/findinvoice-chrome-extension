@@ -56,3 +56,18 @@ export async function getStartDate() {
     return startDate
 }
 
+export async function waitForTabToClose(tabId) {
+    return new Promise((resolve, reject) => {
+        // Listener for the tab removal event
+        const onRemoved = (removedTabId) => {
+            if (removedTabId === tabId) {
+                // Remove the listener and resolve the promise
+                chrome.tabs.onRemoved.removeListener(onRemoved);
+                resolve();
+            }
+        };
+
+        // Add the listener to the onRemoved event
+        chrome.tabs.onRemoved.addListener(onRemoved);
+    });
+}

@@ -1,4 +1,4 @@
-import { convertAssoc, sleep, SUPPLIERS, getStartDate } from "./utils.js"
+import { convertAssoc, sleep, SUPPLIERS, getStartDate, waitForTabToClose } from "./utils.js"
 
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installed.")
@@ -64,7 +64,7 @@ async function downloadInvoiceNewTab(invoices, supplierKey = null) {
         if(supplierKey)
             injectScriptOnCompleted([`content/utils.js`,`suppliers/${supplierKey}_content.js`], url, subtab.id)
 
-        await sleep(2000) //avoid opening too many tabs
+        await waitForTabToClose(subtab.id)
         //could also close here the tab
         //could also check here if the window has been properly opened
         //FIXME better listen for download event to mark as downloaded!
