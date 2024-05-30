@@ -50,17 +50,25 @@ function convertElOrderItem(elOrderItem) {
     const priceText = elOrderItem.querySelector('.order-item-content-opt-price-total').innerText
     const price = parseFloat(priceText.replace(',', '.').replace(/[^\d.]/g, ''))
 
-    //'Commande passée le: 7 mai 2024' Order date: May 7, 2024
-    const dateInnerText = elOrderItem.querySelector('.order-item-header-right-info div:nth-child(1)').innerText
-    const [,dateText] = dateInnerText.split(': ')
-
-    const date = convertDate(dateText)
+    const date = extractDate(elOrderItem)
 
     const url = elOrderItem.querySelector('.order-item-header-right a').href;
 
     const fn = `${date}_aliexpress_${price}_${id}.pdf`
 
     return { id, price, date, url, fn }
+}
+
+function extractDate(elOrderItem) {
+    //'Order date: May 7, 2024'
+    const dateInnerText = elOrderItem.querySelector('.order-item-header-right-info div:nth-child(1)').innerText
+    const [,dateText] = dateInnerText.split(': ')
+    return convertDate(dateText)
+}
+
+function getLastDate() {
+    const elOrderItem = Array.from(document.querySelectorAll('.order-item')).pop() //last order
+    return extractDate(elOrderItem)
 }
 
 function mergeOrder(orders) {
@@ -84,8 +92,11 @@ function mergeOrder(orders) {
 // Aliexpress often skip order, should get them in other way, like here https://www.aliexpress.com/p/wallet-ui-follow/card-record.html?pha_manifest=wallet_card_record&bizScene=TRADE
 async function mainOrdersList() {
     let prevCount = document.querySelectorAll('.order-item').length
-    const maxCount = 0 //mean we should get 10+maxCount*10
-    for (let i = 0; i < maxCount && getMoreEl(); i++) { // get max 60 order until no more
+    const startDate = await getStartDate() //will probably also need to use lastRunDate()
+
+    const maxCount = 25 //mean we should get 10+maxCount*10 in theory, knowing that there are 75% missing orders bc of AE bug in pagination
+    let lastDate = getLastDate()
+    for (let i = 0; i < maxCount && getMoreEl() && (startDate === null || lastDate >= startDate); i++) { // get max 60 order until no more
         getMoreEl().click()
         await waitForElementChange('.order-main', 5000)
         let count = document.querySelectorAll('.order-item').length
@@ -93,6 +104,7 @@ async function mainOrdersList() {
             console.log(i, 'missing order', prevCount + 10 - count)
         prevCount = count
         await sleep(100) //probably useless, time to have the dom updated?
+        lastDate = getLastDate()
     }
 
     const elOrderItems = document.querySelectorAll('.order-item')
