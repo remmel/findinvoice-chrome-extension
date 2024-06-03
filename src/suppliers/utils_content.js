@@ -1,16 +1,6 @@
-// currently, that utils.js is always injected aside ${supplier}_content.js, in the future,
-// we could think about using a packager to only provide what is needed
-// using module, and importScript
+
 // could try to reproduce similar API than https://pptr.dev/api/puppeteer.waitforselectoroptions
-
-const logToto = () => console.log('toto')
-
-const sleep = ms => new Promise(r => setTimeout(r, ms))
-
-const maxWait = ms => promise =>
-Promise.race([sleep(ms), promise])
-
-function waitForSelector(selector, timeout = 5000, interval = 100) {
+export function waitForSelector(selector, timeout = 5000, interval = 100) {
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(() => {
             const element = document.querySelector(selector)
@@ -27,7 +17,7 @@ function waitForSelector(selector, timeout = 5000, interval = 100) {
     })
 }
 
-function waitForElementChange(selector, timeout = 30000) {
+export function waitForElementChange(selector, timeout = 30000) {
     return Promise.race([_waitForElementChange(selector), sleep(timeout)])
 }
 
@@ -65,25 +55,15 @@ async function _waitForElementChange(selector) {
     });
 }
 
-const msg_downloadInvoices = function(invoices, headers = []) {
+export const msg_downloadInvoices = function(invoices, headers = []) {
     chrome.runtime.sendMessage({action: 'downloadInvoices', invoices, headers})
 }
 
-const msg_downloadInvoicesNewTab = function(invoices, supplierKey) {
+export const msg_downloadInvoicesNewTab = function(invoices, supplierKey) {
     chrome.runtime.sendMessage({action: 'downloadInvoicesNewTab', invoices, supplierKey})
 }
 
-// const msg_storage_startDate = async function() {
-//     const result = await chrome.storage.sync.get({startDate: ''})
-// }
-
-async function getStartDate() {
-    const {startDate} = await chrome.storage.sync.get({startDate: ''})
-    return startDate
-}
-
-
-const addStyle = styleString => {
+export const addStyle = styleString => {
     const style = document.createElement('style')
     style.textContent = styleString
     document.head.append(style)

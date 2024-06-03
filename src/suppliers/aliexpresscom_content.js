@@ -1,3 +1,6 @@
+import { getStartDate, sleep } from "../utils_commons.js";
+import { msg_downloadInvoicesNewTab, waitForElementChange } from "./utils_content.js";
+
 console.log("aliexpresscom")
 
 function getMoreEl() {

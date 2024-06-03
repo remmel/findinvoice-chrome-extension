@@ -1,3 +1,5 @@
+import { sleep } from "../utils_commons.js";
+
 console.log("openaicom")
 
 function getViewMoreEl() {

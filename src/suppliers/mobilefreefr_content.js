@@ -1,3 +1,5 @@
+import { msg_downloadInvoices } from "./utils_content.js";
+
 console.log("mobilefreefr")
 
 if (window.location.href.startsWith('https://mobile.free.fr/account/v2/login')) {
@@ -27,5 +29,5 @@ if (window.location.href.startsWith('https://mobile.free.fr/account/v2/login')) 
         //chrome.runtime.sendMessage({ action: 'downloadInvoice', url, fn, id })
         invoices.push({url, fn, id, date})
     })
-    chrome.runtime.sendMessage({action: 'downloadInvoices', invoices})
+    msg_downloadInvoices(invoices)
 }

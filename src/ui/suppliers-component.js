@@ -41,7 +41,7 @@ class SuppliersComponent extends LitElement {
             <div>
                 ${Object.entries(this.suppliers).map(([key, supplier]) => html`
                     <button class="seller" @click=${() => this.onClickSupplier(key)}>
-                        <img src="../icons/${key}_64.png" alt="${supplier.label} logo">
+                        <img src="/icons/${key}_64.png" alt="${supplier.label} logo">
                         <span>${supplier.label}</span>
                     </button>
                 `)}

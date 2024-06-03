@@ -1,5 +1,8 @@
-console.log('monkeyPatchFetch.js')
-
+/**
+ * Many solution to inject js in the world context, see:
+ * https://stackoverflow.com/questions/9515704/access-variables-and-functions-defined-in-page-context-from-an-extension
+ * https://dev.to/jacksteamdev/advanced-config-for-rpce-3966#main-world-scripts
+ */
 //could also send event with data to the content context who will listen me
 function proxyFetch(callback = null) {
     const originalFetch = fetch

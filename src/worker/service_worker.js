@@ -1,29 +1,25 @@
-import { convertAssoc, sleep, SUPPLIERS, getStartDate, waitForTabToClose } from "./utils.js"
+import { getStartDate } from "../utils_commons.js";
+import { convertAssoc, SUPPLIERS, waitForTabToClose } from "./utils.js"
+import leboncoin_mainWorld from '../suppliers/leboncoinfr_content_worldmain.js?script&module' // /!\ no HMR :(
+import utils_mainWorld from '../suppliers/monkeyPatchFetch.js?script&module'
 
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installed.")
 })
 
-function injectContentScript(tabId, files) {
-    return chrome.scripting.executeScript({
-        target: { tabId },
-        files: files
-    });
-}
+console.log(leboncoin_mainWorld)
 
-function injectScriptOnCompleted(files, supplierUrl, tabId) {
-    chrome.webNavigation.onCompleted.addListener(e => {
-        if(e.tabId === tabId && e.frameId ===0) {
-            console.log('onComplete', e, tabId, files)
-            injectContentScript(tabId, files)
-        }
-    }, {
-        // url: [{hostEquals: new URL(supplierUrl.invoices).hostname}], //openai, multiple hosts pay/chat
-        frameId: 0, //works, but no info in doc, so also above
-        tabId: tabId //seems to be ignored
-    })
-}
 
+chrome.scripting.registerContentScripts([
+    {
+        id: 'XMLOverride',
+        js: [utils_mainWorld, leboncoin_mainWorld],
+        matches: ["https://www.leboncoin.fr/*"], //also in host_permissions
+        persistAcrossSessions: true,
+        runAt: 'document_start',
+        world: 'MAIN',
+    },
+])
 
 
 async function downloadInvoices(invoices, headers, preDownload=() =>{}) {
@@ -61,8 +57,8 @@ async function downloadInvoiceNewTab(invoices, supplierKey = null) {
         if(await Cache.hasInvoice(fn)) continue //already downloaded
 
         const subtab = await chrome.tabs.create({url}) //, active: false}) //must be active for autoclose
-        if(supplierKey)
-            injectScriptOnCompleted([`src/content/utils.js`,`src/suppliers/${supplierKey}_content.js`], url, subtab.id)
+        // if(supplierKey)
+        //     injectScriptOnCompleted([`src/content/utils.js`,`src/suppliers/${supplierKey}_content.js`], url, subtab.id)
 
         await waitForTabToClose(subtab.id)
         //could also close here the tab
@@ -82,17 +78,6 @@ async function downloadInvoiceNewTab(invoices, supplierKey = null) {
 let tab = null
 
 //TODO infinite download?!? with orange
-
-function saveBlobAsPDF(blob, fileName) {
-    const reader = new FileReader();
-    reader.onload = function () {
-        const link = document.createElement('a');
-        link.href = reader.result;
-        link.download = fileName;
-        link.click();
-    };
-    reader.readAsDataURL(blob);
-}
 
 //cannot use async directly when returning response, see https://stackoverflow.com/questions/44056271
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -186,7 +171,7 @@ async function loadSupplierUrlAndInject(supplierKey) {
 
     console.log('clickpop', tabId)
 
-    injectScriptOnCompleted([`src/content/utils.js`, `src/suppliers/${supplierKey}_content.js`], supplierUrl, tabId)
+    // injectScriptOnCompleted([`src/content/utils.js`, `src/suppliers/${supplierKey}_content.js`], supplierUrl, tabId)
 }
 
 

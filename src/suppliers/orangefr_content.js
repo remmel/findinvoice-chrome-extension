@@ -1,3 +1,5 @@
+import { msg_downloadInvoices } from "./utils_content.js";
+
 console.log("orangefr")
 
 if (window.location.href.startsWith('https://login.orange.fr/')) {
@@ -76,7 +78,6 @@ async function fetchInvoices() {
                 id: bill.id,
                 date: bill.date
             })
-            console.log(invoices)
         })
     }
 

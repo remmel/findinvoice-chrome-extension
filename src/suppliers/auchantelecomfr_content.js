@@ -1,3 +1,5 @@
+import { getStartDate } from "../utils_commons.js";
+
 console.log("auchantelecomfr")
 
 main()
@@ -36,16 +38,15 @@ async function main() {
 
         // downloadFormData(url, fn, inputName, inputValue)
 
-        invoices.push({url, fn, inputName, inputValue})
+        invoices.push({url, fn, inputName, inputValue, date})
     }
 
     if(invoices.length === 0) return
 
-    console.log(invoices)
-
     const localStorageDlInvoices = await getLocalStorageDownloadedInvoices()
-    console.log(112)
     const startDate = await getStartDate()
+
+    console.log(invoices, startDate)
 
     const addedInvoices = []
     for(const {url, fn, date, inputName, inputValue} of invoices) {
@@ -82,7 +83,6 @@ async function downloadFormData(url, fn, inputName, inputValue) {
     document.body.appendChild(a)
     a.click()
 }
-
 
 async function getLocalStorageDownloadedInvoices() {
     const downloadedInvoices = await callBackgroundFunction('getLocalStorageDownloadedInvoices')

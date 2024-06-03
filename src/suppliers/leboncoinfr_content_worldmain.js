@@ -1,8 +1,9 @@
+//import { proxyFetch } from "/src/suppliers/utils_worldmain.js" //import not possible
 console.log("leboncoinfr world")
 
 // Communicate from webpage (world:main) to worker extension
 // https://developer.chrome.com/docs/extensions/develop/concepts/messaging#external-webpage
-const extensionId = 'pgaokoiahcbdkcjhiefljhmmnhojoenn'
+const extensionId = 'pcbgkccklojkacgnadekalpoabbhmpgk'
 async function msg_startDateExt() {
     return await chrome.runtime.sendMessage(extensionId, {action: 'startDate'})
 }
