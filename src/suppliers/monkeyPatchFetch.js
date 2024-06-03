@@ -4,7 +4,10 @@
  * https://dev.to/jacksteamdev/advanced-config-for-rpce-3966#main-world-scripts
  */
 //could also send event with data to the content context who will listen me
-function proxyFetch(callback = null) {
+
+
+// in build, need to do window.X otherwise, the build file will be empty
+window.proxyFetch = function(callback = null) {
     const originalFetch = fetch
     fetch = async (...args) => {
         let [resource, config ] = args
@@ -21,7 +24,7 @@ function proxyFetch(callback = null) {
     };
 }
 
-function proxyXMLHttpRequest(callback = null){
+window.proxyXMLHttpRequest = function(callback = null){
     const originalXMLHttpRequestOpen = XMLHttpRequest.prototype.open;
 
     XMLHttpRequest.prototype.open = function() {
