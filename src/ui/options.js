@@ -2,7 +2,7 @@
 // https://lit.dev/docs/getting-started/#use-bundles (decorators not available w/o transpiler : https://lit.dev/docs/v1/components/decorators/#enabling-decorators)
 // https://developer.chrome.com/docs/extensions/develop/ui/options-page
 
-import { LitElement, html, css } from '../lib/lit-core.min.js'
+import { LitElement, html, css } from 'lit'
 import './settings-component.js'
 import './cache-list-component.js'
 import './suppliers-component.js'

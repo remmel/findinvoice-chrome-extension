@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Invoice Downloader",
+  "name": "Invoice Downloader - crxjs",
   "version": "1.0",
   "description": "Downloads invoices automatically from Orange, FreeMobile, OpenAI...",
   "permissions": [
@@ -14,13 +14,13 @@
     "debugger"
   ],
   "background": {
-    "service_worker": "worker/service_worker.js",
+    "service_worker": "src/worker/service_worker.js",
     "type": "module"
   },
   "action": {
-    "default_popup": "ui/popup.html"
+    "default_popup": "src/ui/popup.html"
   },
-  "options_page": "ui/options.html",
+  "options_page": "src/ui/options.html",
   "host_permissions": [
     "https://mobile.free.fr/*",
     "https://espace-client.orange.fr/*",
@@ -34,24 +34,24 @@
   "icons": {
     "128": "icon128.png"
   },
-  "web_accessible_resources": [{
-    "resources": ["content/monkeyPatchFetch.js", "content/utils.js"],
-    "matches": ["<all_urls>"]
-  }],
   "content_scripts": [
     {
       "world": "ISOLATED",
       "matches": ["https://www.leboncoin.fr/*"],
-      "js": ["content/utils.js","lib/jspdf.umd.min.js","suppliers/leboncoinfr_content_manifest.js"],
+      "js": ["src/content/utils.js","src/suppliers/leboncoinfr_content_manifest.js"],
       "run_at": "document_start"
     },
     {
     "world": "MAIN",
     "matches": ["https://www.leboncoin.fr/*"],
-    "js": ["content/utils.js","content/monkeyPatchFetch.js", "suppliers/leboncoinfr_content_world.js"],
+    "js": ["src/content/utils.js","src/content/monkeyPatchFetch.js", "src/suppliers/leboncoinfr_content_world.js"],
     "run_at": "document_start"
   }],
   "externally_connectable": {
     "matches": ["https://www.leboncoin.fr/*"]
-  }
+  },
+  "web_accessible_resources": [{
+    "matches": ["https://www.dumb-to-force-copying-images-in-build.com/*"],
+    "resources": ["src/content/utils.js", "src/suppliers/*"]
+  }]
 }

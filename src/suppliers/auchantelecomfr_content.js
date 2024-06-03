@@ -44,7 +44,8 @@ async function main() {
     console.log(invoices)
 
     const localStorageDlInvoices = await getLocalStorageDownloadedInvoices()
-    const startDate = await startDate()
+    console.log(112)
+    const startDate = await getStartDate()
 
     const addedInvoices = []
     for(const {url, fn, date, inputName, inputValue} of invoices) {

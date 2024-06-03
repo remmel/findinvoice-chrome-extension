@@ -1,4 +1,4 @@
-import { LitElement, html, css } from '../lib/lit-core.min.js'
+import { LitElement, html, css } from 'lit'
 
 class SettingsComponent extends LitElement {
     static get properties() {

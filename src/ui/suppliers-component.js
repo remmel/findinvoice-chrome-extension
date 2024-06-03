@@ -1,4 +1,4 @@
-import { LitElement, html, css } from '../lib/lit-core.min.js'
+import { LitElement, html, css } from 'lit'
 import { SUPPLIERS } from "../worker/utils.js"
 
 class SuppliersComponent extends LitElement {

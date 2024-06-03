@@ -62,7 +62,7 @@ async function downloadInvoiceNewTab(invoices, supplierKey = null) {
 
         const subtab = await chrome.tabs.create({url}) //, active: false}) //must be active for autoclose
         if(supplierKey)
-            injectScriptOnCompleted([`content/utils.js`,`suppliers/${supplierKey}_content.js`], url, subtab.id)
+            injectScriptOnCompleted([`src/content/utils.js`,`src/suppliers/${supplierKey}_content.js`], url, subtab.id)
 
         await waitForTabToClose(subtab.id)
         //could also close here the tab
@@ -186,7 +186,7 @@ async function loadSupplierUrlAndInject(supplierKey) {
 
     console.log('clickpop', tabId)
 
-    injectScriptOnCompleted([`content/utils.js`, `suppliers/${supplierKey}_content.js`], supplierUrl, tabId)
+    injectScriptOnCompleted([`src/content/utils.js`, `src/suppliers/${supplierKey}_content.js`], supplierUrl, tabId)
 }
 
 

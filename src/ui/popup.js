@@ -2,8 +2,10 @@
 // https://lit.dev/docs/getting-started/#use-bundles (decorators not available w/o transpiler : https://lit.dev/docs/v1/components/decorators/#enabling-decorators)
 // https://developer.chrome.com/docs/extensions/develop/ui/options-page
 
-import { LitElement, html, css } from '../lib/lit-core.min.js'
+import { LitElement, html, css } from 'lit'
 import './suppliers-component.js'
+
+console.log('popup.js')
 
 class PopupApp extends LitElement {
     static get styles() {
