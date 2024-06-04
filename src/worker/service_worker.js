@@ -1,19 +1,18 @@
 import { getStartDate } from "../utils_commons.js";
 import { convertAssoc, SUPPLIERS, waitForTabToClose } from "./utils.js"
-import leboncoin_mainWorld from '../suppliers/leboncoinfr_content_worldmain.js?script&module' // /!\ no HMR :(
-import utils_mainWorld from '../suppliers/monkeyPatchFetch.js?script&module'
+import leboncoin_mainWorld from '../suppliers/leboncoinfr_content_worldmain?script&module' // /!\ no HMR :(
 
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installed.")
 })
 
-console.log(leboncoin_mainWorld)
+// console.log(leboncoin_mainWorld, utils_mainWorld)
 
 
 chrome.scripting.registerContentScripts([
     {
         id: 'XMLOverride',
-        js: [utils_mainWorld, leboncoin_mainWorld],
+        js: [leboncoin_mainWorld],
         matches: ["https://www.leboncoin.fr/*"], //also in host_permissions
         persistAcrossSessions: true,
         runAt: 'document_start',
