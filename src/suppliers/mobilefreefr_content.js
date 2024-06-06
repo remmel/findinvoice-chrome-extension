@@ -29,5 +29,5 @@ if (window.location.href.startsWith('https://mobile.free.fr/account/v2/login')) 
         //chrome.runtime.sendMessage({ action: 'downloadInvoice', url, fn, id })
         invoices.push({url, fn, id, date})
     })
-    msg_downloadInvoices(invoices)
+    msg_downloadInvoices(invoices, 'mobilefreefr')
 }

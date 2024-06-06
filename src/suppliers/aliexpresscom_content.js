@@ -1,5 +1,5 @@
 import { getStartDate, sleep } from "../utils_commons.js";
-import { msg_downloadInvoicesNewTab, waitForElementChange } from "./utils_content.js";
+import { msg_downloadInvoicesNewTab, waitForElementChange, waitForSelector } from "./utils_content.js";
 
 console.log("aliexpresscom")
 
@@ -94,13 +94,16 @@ function mergeOrder(orders) {
 
 // Aliexpress often skip order, should get them in other way, like here https://www.aliexpress.com/p/wallet-ui-follow/card-record.html?pha_manifest=wallet_card_record&bizScene=TRADE
 async function mainOrdersList() {
-    let prevCount = document.querySelectorAll('.order-item').length
     const startDate = await getStartDate() //will probably also need to use lastRunDate()
-
     const maxCount = 25 //mean we should get 10+maxCount*10 in theory, knowing that there are 75% missing orders bc of AE bug in pagination
+
+    //wait for jsonp api response (https://acs.aliexpress.com/h5/mtop.aliexpress.trade.buyer.order.list/1.0/) and render
+    await waitForSelector('.order-item')
+    let prevCount = document.querySelectorAll('.order-item').length
     let lastDate = getLastDate()
     for (let i = 0; i < maxCount && getMoreEl() && (startDate === null || lastDate >= startDate); i++) { // get max 60 order until no more
         getMoreEl().click()
+        // wait for https://acs.aliexpress.com/h5/mtop.aliexpress.trade.buyer.order.list/1.0/ api response and render
         await waitForElementChange('.order-main', 5000)
         let count = document.querySelectorAll('.order-item').length
         if (count !== prevCount + 10)
@@ -132,7 +135,9 @@ async function mainOrdersList() {
 }
 
 
-function getDlButtonEl() {
+async function getDlButtonEl() {
+    await waitForSelector('.order-status.order-block button', 2000, 125)
+
     const invoiceKeywords = ['Download invoice', 'Descargar factura', 'Télécharger facture']
     const buttons = Array.from(document.querySelectorAll('.order-status.order-block button'))
         .filter(button =>
@@ -149,14 +154,17 @@ function getDlButtonEl() {
 //should better use the replayxhr solution
 async function mainOrderDetail(){
     //create a dumb input to catch focus
-    const targetElement = document.querySelector('.order-status.order-block');
+    // const targetElement = document.querySelector('.order-status.order-block');
     const inputElement = document.createElement('input');
     inputElement.type = 'text';
     inputElement.placeholder = 'Dumb';
     inputElement.id = 'check-focus'
-    targetElement.parentNode.insertBefore(inputElement, targetElement.nextSibling);
+    // targetElement.parentNode.insertBefore(inputElement, targetElement.nextSibling);
+    document.body.insertBefore(inputElement, document.body.firstChild)
+    // TODO create export async function waitUntilDialogClosed(){}
 
-    getDlButtonEl()?.click()
+    const btnEl = await getDlButtonEl() //it waits for the button to appear (api call)
+    btnEl?.click()
 
     await sleep(2000)
 
@@ -171,6 +179,7 @@ async function mainOrderDetail(){
 
     inputElement.focus()
 }
+//3036434196930926
 
 
 if (window.location.href.startsWith('https://www.aliexpress.com/p/order/index.html')) {

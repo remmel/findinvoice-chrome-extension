@@ -6,17 +6,7 @@
 // https://developer.chrome.com/docs/extensions/develop/concepts/messaging#external-webpage
 
 import {proxyFetch} from "./utils_monkeyPatchFetch"
-
-const extensionId = 'pcbgkccklojkacgnadekalpoabbhmpgk'
-
-// async function msg_startDateExt() {
-//     return await chrome.runtime.sendMessage(extensionId, {action: 'startDate'})
-// }
-
-// TODO, should I move that in utils_worldmain.js?
-async function msg_downloadInvoicesNewTabExt(invoices: any[]) {
-    return await chrome.runtime.sendMessage(extensionId, {action: 'downloadInvoicesNewTab', invoices})
-}
+import {msg_downloadInvoicesNewTabExt} from "./utils_wm_msgext";
 
 // callback
 
@@ -51,7 +41,7 @@ if (window.location.href.startsWith('https://www.leboncoin.fr/compte/part/mes-tr
         }
         // console.log(invoices)
 
-        msg_downloadInvoicesNewTabExt(invoices)
+        msg_downloadInvoicesNewTabExt(invoices, 'leboncoinfr')
 
         // document.dispatchEvent(new CustomEvent('message', { detail: data }));
     })

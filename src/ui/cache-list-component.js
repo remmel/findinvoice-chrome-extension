@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit'
+import { CacheInvoice } from "../utils_commons.js";
 
 class CacheListComponent extends LitElement {
     static get properties() {
@@ -18,24 +19,23 @@ class CacheListComponent extends LitElement {
     }
 
     async loadInvoices() {
-        this.invoices = (await msg_getlocalstroagedlinvoices())
+        this.invoices = await CacheInvoice.getInvoices()
     }
 
     handleAddInvoice() {
         const min = 5.00, max = 500.00
         const price =  (Math.random() * (max - min) + min).toFixed(2);
-        const invoicesKeys = ['2024-05-21_dumb_'+price+'.pdf']
-        msg_addlocalstroageinvoice(invoicesKeys, invoicesKeys).then(_ => this.loadInvoices())
+        CacheInvoice.addInvoices(['2024-05-21_dumb_'+price+'.pdf']).then(_ => this.loadInvoices())
     }
 
     handleClearInvoice() {
-        msg_storageClear().then(_ => this.loadInvoices())
+        CacheInvoice.clear().then(_ => this.loadInvoices())
     }
 
     async handleRemoveInvoice(key) {
         const invoices2 = this.invoices.filter(v => v !==key)
-        await msg_storageClear()
-        await msg_addlocalstroageinvoice(invoices2, invoices2)
+        await CacheInvoice.clear()
+        await CacheInvoice.addInvoices(invoices2)
         await this.loadInvoices()
     }
 
@@ -69,16 +69,3 @@ class CacheListComponent extends LitElement {
 }
 
 customElements.define('cache-list-component', CacheListComponent)
-
-
-async function msg_getlocalstroagedlinvoices() {
-    return (await chrome.runtime.sendMessage({action: 'getLocalStorageDownloadedInvoices'})).result
-}
-
-async function msg_storageClear() {
-    return await chrome.runtime.sendMessage({action: 'storage-clear'})
-}
-
-async function msg_addlocalstroageinvoice(total, added) {
-    return await (chrome.runtime.sendMessage({action: 'addLocalStorageDownloadedInvoices', data: {total, added}}))
-}

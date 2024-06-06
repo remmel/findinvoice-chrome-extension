@@ -1,5 +1,7 @@
 
 // could try to reproduce similar API than https://pptr.dev/api/puppeteer.waitforselectoroptions
+import { MSGS_TO_BG, sleep } from "../utils_commons.js";
+
 export function waitForSelector(selector, timeout = 5000, interval = 100) {
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(() => {
@@ -16,6 +18,25 @@ export function waitForSelector(selector, timeout = 5000, interval = 100) {
         }, timeout)
     })
 }
+
+// export function waitForDefined(getElementFn, timeout = 1000, inter val = 50) {
+//     return new Promise((resolve, reject) => {
+//         const startTime = Date.now();
+//
+//         function checkElement() {
+//             const element = getElementFn();
+//             if (element) {
+//                 resolve(element);
+//             } else if (Date.now() - startTime < timeout) {
+//                 setTimeout(checkElement, interval);
+//             } else {
+//                 reject(new Error('Element not found within the timeout period'));
+//             }
+//         }
+//
+//         checkElement();
+//     });
+// }
 
 export function waitForElementChange(selector, timeout = 30000) {
     return Promise.race([_waitForElementChange(selector), sleep(timeout)])
@@ -55,12 +76,16 @@ async function _waitForElementChange(selector) {
     });
 }
 
-export const msg_downloadInvoices = function(invoices, headers = []) {
-    chrome.runtime.sendMessage({action: 'downloadInvoices', invoices, headers})
+export const msg_downloadInvoices = function(invoices, supplier, headers = []) {
+    chrome.runtime.sendMessage({action: MSGS_TO_BG.downloadInvoices, invoices, supplier, headers})
 }
 
-export const msg_downloadInvoicesNewTab = function(invoices, supplierKey) {
-    chrome.runtime.sendMessage({action: 'downloadInvoicesNewTab', invoices, supplierKey})
+export const msg_downloadInvoicesNewTab = function(invoices, supplier) {
+    chrome.runtime.sendMessage({action: MSGS_TO_BG.downloadInvoicesNewTab, invoices, supplier})
+}
+
+export const msg_downloadedInvoices = async function(invoices, supplier, recent) {
+    await chrome.runtime.sendMessage({action: MSGS_TO_BG.downloadedInvoices, invoices, supplier, recent})
 }
 
 export const addStyle = styleString => {

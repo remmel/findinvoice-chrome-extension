@@ -1,16 +1,41 @@
 import { LitElement, html, css } from 'lit'
+import { MSGS_TO_BG, MSGS_FROM_BG } from "../utils_commons.js";
 import { SUPPLIERS } from "../worker/utils.js"
 
 class SuppliersComponent extends LitElement {
     static get properties() {
         return {
-            sellers: { type: Array }
+            suppliers: { type: Object }
         }
     }
 
     constructor() {
         super()
         this.suppliers = SUPPLIERS
+    }
+
+    connectedCallback() {
+        super.connectedCallback()
+        chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+            console.log(message)
+            if(message.action === MSGS_FROM_BG.invoicesDownloaded) {
+                const {recent, invoices, supplier} = message
+                this.suppliers[supplier].collect = {total: invoices.length, recent}
+                this.requestUpdate() // but does not trigger invoices cache list
+                // this.suppliers = {
+                //     ...this.suppliers,
+                //     [supplier]: {
+                //         ...this.suppliers[supplier],
+                //         collect: { total: invoices.length, recent }
+                //     }
+                // };
+                console.log(this.suppliers)
+            }
+        })
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
     }
 
     static styles = css`
@@ -27,13 +52,13 @@ class SuppliersComponent extends LitElement {
 
         button {
             width: 100%;
-            max-width: 200px;
+            max-width: 210px;
             padding: 10px;
         }
     `
 
     onClickSupplier(supplier) {
-        chrome.runtime.sendMessage({action: 'popup-select-supplier', supplier})
+        chrome.runtime.sendMessage({action: MSGS_TO_BG.selectSupplier, supplier})
     }
 
     render() {
@@ -43,6 +68,7 @@ class SuppliersComponent extends LitElement {
                     <button class="seller" @click=${() => this.onClickSupplier(key)}>
                         <img src="/icons/${key}_64.png" alt="${supplier.label} logo">
                         <span>${supplier.label}</span>
+                        ${supplier.collect ? html`<span>&nbsp;(${supplier.collect.recent} / ${supplier.collect.total})</span>`: ''}
                     </button>
                 `)}
             </div>

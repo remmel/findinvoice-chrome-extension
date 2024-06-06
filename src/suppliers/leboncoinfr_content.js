@@ -68,7 +68,7 @@ async function main() {
     const price = parseFloat(document.querySelector('h2').textContent.replace(',','.'))
     const id = getLastPathSegment(window.location.href)
     const fn = `${date}_leboncoin_${price}_${id}.pdf`
-    document.title = fn
+    document.title = fn //FIXME sometimes, printed filename is not set
 
     await sleep(250) //for img to load
     window.print()

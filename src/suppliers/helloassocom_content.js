@@ -36,7 +36,7 @@ async function main() {
 
     console.log(invoices)
 
-    msg_downloadInvoices(invoices)
+    msg_downloadInvoices(invoices, 'helloassocom')
 }
 
 main()

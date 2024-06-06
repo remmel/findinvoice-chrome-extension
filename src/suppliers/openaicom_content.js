@@ -46,7 +46,7 @@ async function main() {
 
             invoices.push({url, fn, id:null, date})
         }
-        chrome.runtime.sendMessage({action: 'downloadInvoicesOpenAi', invoices})
+        chrome.runtime.sendMessage({action: 'downloadInvoicesOpenAi', invoices, supplier: 'openaicom'})
     }
 }
 

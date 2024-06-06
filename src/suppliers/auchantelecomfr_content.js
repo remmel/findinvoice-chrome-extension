@@ -1,4 +1,5 @@
-import { getStartDate } from "../utils_commons.js";
+import { CacheInvoice, CacheInvoice as CachedInvoice, getStartDate } from "../utils_commons.js";
+import { msg_downloadedInvoices } from "./utils_content.js";
 
 console.log("auchantelecomfr")
 
@@ -43,27 +44,27 @@ async function main() {
 
     if(invoices.length === 0) return
 
-    const localStorageDlInvoices = await getLocalStorageDownloadedInvoices()
     const startDate = await getStartDate()
+    const cachedInvoices = await CachedInvoice.getInvoices()
 
     console.log(invoices, startDate)
 
     const addedInvoices = []
     for(const {url, fn, date, inputName, inputValue} of invoices) {
-        if(!localStorageDlInvoices.includes(fn)) {
+        if(!cachedInvoices.includes(fn)) {
             if(startDate !== null && startDate > date) continue
             console.log('download', fn)
-            downloadFormData(url, fn, inputName, inputValue) //could also just click on the link!
+            await downloadFormData(url, fn, inputName, inputValue) //could also just click on the link!
             addedInvoices.push(fn)
         }
     }
 
-    addLocalStorageDownloadedInvoices({total: invoices, added: addedInvoices})
+    await CacheInvoice.addInvoices(addedInvoices)
+
+    await msg_downloadedInvoices(invoices, 'auchantelecomfr', addedInvoices.length)
+
+    window.close()
 }
-
-
-
-
 
 
 // doing that on worker, is complex because of //https://stackoverflow.com/questions/77426685/how-to-get-url-createobjecturl-of-a-blob-uint8array-in-a-manifestv3-service-work/77427098#77427098
@@ -82,25 +83,4 @@ async function downloadFormData(url, fn, inputName, inputValue) {
     a.download = fn
     document.body.appendChild(a)
     a.click()
-}
-
-async function getLocalStorageDownloadedInvoices() {
-    const downloadedInvoices = await callBackgroundFunction('getLocalStorageDownloadedInvoices')
-    return downloadedInvoices ?? []
-}
-
-function addLocalStorageDownloadedInvoices(data) {
-    callBackgroundFunction('addLocalStorageDownloadedInvoices', data)
-}
-
-function callBackgroundFunction(action, data = null) {
-    return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({ action, data }, response => {
-            // if (chrome.runtime.lastError) {
-                // reject(chrome.runtime.lastError)
-            // } else {
-                resolve(response.result)
-            // }
-        })
-    })
 }
