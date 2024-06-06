@@ -27,7 +27,7 @@ export default defineManifest({
         "debugger"
     ],
     background: {
-        service_worker: "src/worker/service_worker.js",
+        service_worker: "src/worker/background.js",
         type: "module"
     },
     action: {
@@ -43,9 +43,5 @@ export default defineManifest({
     ],
     externally_connectable: {
         matches: ["https://www.leboncoin.fr/*"]
-    },
-    // web_accessible_resources: [{
-    //     matches: ["https://www.dumb-to-force-copying-images-in-build.com/*"],
-    //     resources: ["src/content/utils.js", "src/suppliers/*"]
-    // }]
+    }
 })

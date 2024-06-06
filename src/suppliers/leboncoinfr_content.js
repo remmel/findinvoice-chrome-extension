@@ -72,7 +72,7 @@ async function main() {
 
     await sleep(250) //for img to load
     window.print()
-    await sleep(250) //for print window to be displayed, does not seem to be needed
+    await sleep(1000) //sometime, is needed
     window.close()
 }
 
