@@ -1,47 +1,16 @@
 import { getStartDate, sleep } from "../utils_commons.js";
-import { msg_downloadInvoicesNewTab, waitForElementChange, waitForSelector } from "./utils_content.js";
+import {
+    parseDateI18n,
+    msg_downloadInvoicesNewTab,
+    waitForElementChange,
+    waitForSelector,
+    parsePrice
+} from "./utils_content.js";
 
 console.log("aliexpresscom")
 
 function getMoreEl() {
     return document.querySelector('.order-more button')
-}
-
-// "May 7, 2024", "Mar 29,2024", "7 mag 2024", "1 apr 2024", "1 abr, 2024",
-function convertDate(dateStr) {
-    const months_i18n = {
-        // pt, es, it, fr
-        "Jan": ["jan", "ene", "gen", "janv."],
-        "Feb": ["fev", "feb", "feb", "févr."],
-        "Mar": ["mar", "mar", "mar", "mars"],
-        "Apr": ["abr", "abr", "apr", "avr."],
-        "May": ["mai", "may", "mag", "mai"],
-        "Jun": ["jun", "jun", "giu", "juin"],
-        "Jul": ["jul", "jul", "lug", "juil."],
-        "Aug": ["ago", "ago", "ago", "août"],
-        "Sep": ["set", "sept", "set", "sept."],
-        "Oct": ["out", "oct", "ott", "oct."],
-        "Nov": ["nov", "nov", "nov", "nov."],
-        "Dec": ["dez", "dic", "dic", "déc."],
-    }
-
-    replaceLoop: for (const [engMonth, i18nMonths] of Object.entries(months_i18n)) {
-        for (const i18nMonth of i18nMonths) {
-            if (dateStr.includes(i18nMonth)) {
-                dateStr = dateStr.replace(i18nMonth, engMonth)
-                break replaceLoop
-            }
-        }
-    }
-
-    const date = new Date(dateStr)
-
-    const formattedYear = date.getFullYear()
-    const formattedMonth = String(date.getMonth() + 1).padStart(2, '0')
-    const formattedDay = String(date.getDate()).padStart(2, '0')
-
-    // Return the formatted date string
-    return `${formattedYear}-${formattedMonth}-${formattedDay}`;
 }
 
 function convertElOrderItem(elOrderItem) {
@@ -51,7 +20,7 @@ function convertElOrderItem(elOrderItem) {
 
     //'7,96€'
     const priceText = elOrderItem.querySelector('.order-item-content-opt-price-total').innerText
-    const price = parseFloat(priceText.replace(',', '.').replace(/[^\d.]/g, ''))
+    const price = parsePrice(priceText)
 
     const date = extractDate(elOrderItem)
 
@@ -66,7 +35,7 @@ function extractDate(elOrderItem) {
     //'Order date: May 7, 2024'
     const dateInnerText = elOrderItem.querySelector('.order-item-header-right-info div:nth-child(1)').innerText
     const [,dateText] = dateInnerText.split(': ')
-    return convertDate(dateText)
+    return parseDateI18n(dateText)
 }
 
 function getLastDate() {

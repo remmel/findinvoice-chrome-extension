@@ -122,8 +122,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
 
         case MSGS_TO_BG.selectSupplier: {
-            const {supplier} = request
-            loadSupplierUrlAndInject(supplier)
+            (async () => {
+                const {supplier} = request
+                tab = await openTab(supplier)
+            })()
             break
         }
 
@@ -150,21 +152,14 @@ chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => 
 })
 
 
-
-async function loadSupplierUrlAndInject(supplierKey) {
+async function openTab(supplierKey) {
     const tabs = await chrome.tabs.query({active: true, lastFocusedWindow: true}) //{active: true, currentWindow: true})
-    tab = tabs[0]
+    const activeTab = tabs[0]
     const supplierUrl = SUPPLIERS[supplierKey]
 
     // update current tab if its "new tab" or current supplier website
-    if (tab.url === "chrome://newtab/" || tab.url.startsWith((new URL(supplierUrl.invoices)).origin))
-        tab = await chrome.tabs.update({url: supplierUrl.invoices})
+    if (activeTab.url === "chrome://newtab/" || activeTab.url.startsWith((new URL(supplierUrl.invoices)).origin))
+        return await chrome.tabs.update({url: supplierUrl.invoices})
     else
-        tab = await chrome.tabs.create({url: supplierUrl.invoices}) //, active: false})
-
-    const tabId = tab.id //important to copy, because below I want the current tabId, not the future current tabId
-
-    console.log('clickpop', tabId)
-
-    // injectScriptOnCompleted([`src/content/utils.js`, `src/suppliers/${supplierKey}_content.js`], supplierUrl, tabId)
+        return await chrome.tabs.create({url: supplierUrl.invoices}) //, active: false})
 }

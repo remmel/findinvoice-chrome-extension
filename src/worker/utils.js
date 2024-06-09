@@ -23,6 +23,11 @@ export const SUPPLIERS = {
         matches: ['https://www.aliexpress.com/*'],
         label: 'Aliexpress'
     },
+    amazonfr: {
+        invoices: 'https://www.amazon.fr/your-orders/orders?timeFilter=months-3&ref_=ppx_yo2ov_dt_b_filter_all_m3',
+        matches: ['https://www.amazon.fr/*'],
+        label: 'AmazonFr'
+    },
     auchantelecomfr: {
         invoices: 'https://www.auchantelecom.fr/fr/client/Consommations/Factures/Default.html',
         matches: ['https://www.auchantelecom.fr/*'],
