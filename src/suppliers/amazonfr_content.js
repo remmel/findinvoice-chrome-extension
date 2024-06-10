@@ -134,7 +134,7 @@ async function mainOrderList() {
         const invoicesUrls = Array.from(invoiceUrlEls).map(a => a.href)
 
         for(const [i, url] of invoicesUrls.entries()) {
-            // fetchPdfAndExtractData(invoiceUrl)
+            // fetchPdfAndExtractData(url)
             const price = nbDeliveries === 1 ? totalPrice : 0
             const fn = `${date}_amazon_${price}_${orderId}-I${i}.pdf`
             invoices.push({

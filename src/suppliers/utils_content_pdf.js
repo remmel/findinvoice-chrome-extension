@@ -1,7 +1,8 @@
 
 import {getDocument} from 'pdfjs-dist/build/pdf.mjs'
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/lib/pdf.worker.mjs' //TODO find a cleaner way
+pdfjsLib.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('/node_modules/pdfjs-dist/build/pdf.worker.mjs') //copied by crxjs
 
+// Do not work on background worker
 export async function extractTextFromData(buffer) {
     const pdfDoc = await getDocument({ data: buffer }).promise
     let text = '';

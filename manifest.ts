@@ -45,7 +45,7 @@ export default defineManifest({
         matches: ["https://www.leboncoin.fr/*"]
     },
     "web_accessible_resources": [{
-        "matches": ["https://www.dumb-to-force-copying-images-in-build.com/*"],
-        "resources": ["src/lib/pdfjs-dist/*"]
+        "matches": ["https://www.amazon.fr/*"], //everyone using the pdf extension
+        "resources": ["node_modules/pdfjs-dist/build/pdf.worker.mjs"]
     }]
 })
