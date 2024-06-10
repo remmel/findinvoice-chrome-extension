@@ -94,22 +94,22 @@ export const addStyle = styleString => {
     document.head.append(style)
 }
 
-// "May 7, 2024", "Mar 29,2024", "7 mag 2024", "1 apr 2024", "1 abr, 2024",
+// "May 7, 2024", "Mar 29,2024", "7 mag 2024", "1 apr 2024", "1 abr, 2024", "7 de enero de 2024"
 export function parseDateI18n(dateStr) {
     const months_i18n = {
         // pt, es, it, fr
-        "Jan": ["jan", "ene", "gen", "janv."],
-        "Feb": ["fev", "feb", "feb", "févr."],
-        "Mar": ["mar", "mar", "mar", "mars"],
-        "Apr": ["abr", "abr", "apr", "avr."],
-        "May": ["mai", "may", "mag", "mai"],
-        "Jun": ["jun", "jun", "giu", "juin"],
-        "Jul": ["jul", "jul", "lug", "juil."],
-        "Aug": ["ago", "ago", "ago", "août"],
-        "Sep": ["set", "sept", "set", "sept."],
-        "Oct": ["out", "oct", "ott", "oct."],
-        "Nov": ["nov", "nov", "nov", "nov."],
-        "Dec": ["dez", "dic", "dic", "déc."],
+        "Jan": ["de enero de", "jan", "ene", "gen", "janv."],
+        "Feb": ["de febrero de", "fev", "feb", "feb", "févr."],
+        "Mar": ["de marzo de", "mar", "mar", "mar", "mars"],
+        "Apr": ["de abril de", "abr", "abr", "apr", "avr."],
+        "May": ["de mayo de", "mai", "may", "mag", "mai"],
+        "Jun": ["de junio de", "jun", "jun", "giu", "juin"],
+        "Jul": ["de julio de", "jul", "jul", "lug", "juil."],
+        "Aug": ["de agosto de", "ago", "ago", "ago", "août"],
+        "Sep": ["de septiembre de", "set", "sept", "set", "sept."],
+        "Oct": ["de octubre de", "out", "oct", "ott", "oct."],
+        "Nov": ["de noviembre de", "nov", "nov", "nov", "nov."],
+        "Dec": ["de diciembre de", "dez", "dic", "dic", "déc."],
     }
 
     replaceLoop: for (const [engMonth, i18nMonths] of Object.entries(months_i18n)) {

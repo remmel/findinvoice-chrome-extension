@@ -24,8 +24,8 @@ class PopupApp extends LitElement {
 
     render() {
         return html`
-            <suppliers-component></suppliers-component>
             <button @click=${this.onClickOptionPage}>⚙ Options</button>
+            <suppliers-component></suppliers-component>
         `
     }
 }

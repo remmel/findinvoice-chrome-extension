@@ -14,10 +14,34 @@ export const SUPPLIERS: Suppliers = {
         matches: ['https://www.aliexpress.com/*'],
         label: 'Aliexpress',
     },
+    // amazoncom: {
+    //     // invoices: 'https://www.amazon.com/gp/css/order-history?ref_=nav_AccountFlyout_orders',
+    //     invoices: 'https://www.amazon.com/your-orders/orders?timeFilter=year-2011&ref_=ppx_yo2ov_dt_b_filter_all_y2011',
+    //     matches: ['https://www.amazon.com/*'],
+    //     label: 'Amazon 🇺🇸',
+    // },
+    amazonde: {
+        invoices: 'https://www.amazon.de/gp/css/order-history?ref_=nav_AccountFlyout_orders',
+        // invoices: 'https://www.amazon.de/your-orders/orders?timeFilter=year-2021',
+        matches: ['https://www.amazon.de/*'],
+        label: 'Amazon 🇩🇪',
+    },
+    amazones: {
+        invoices: 'https://www.amazon.es/gp/css/order-history?ref_=nav_AccountFlyout_orders',
+        // invoices: 'https://www.amazon.es/your-orders/orders?timeFilter=year-2024&ref_=ppx_yo2ov_dt_b_filter_all_y2024',
+        matches: ['https://www.amazon.es/*'],
+        label: 'Amazon 🇪🇸',
+    },
     amazonfr: {
         invoices: 'https://www.amazon.fr/your-orders/orders?timeFilter=months-3&ref_=ppx_yo2ov_dt_b_filter_all_m3',
         matches: ['https://www.amazon.fr/*'],
-        label: 'AmazonFr',
+        label: 'Amazon 🇫🇷',
+    },
+    amazonit: {
+        invoices: 'https://www.amazon.it/gp/css/order-history?ref_=nav_AccountFlyout_orders',
+        // invoices: 'https://www.amazon.it/your-orders/orders?timeFilter=year-2020&ref_=ppx_yo2ov_dt_b_filter_all_y2020',
+        matches: ['https://www.amazon.it/*'],
+        label: 'Amazon 🇮🇹',
     },
     auchantelecomfr: {
         invoices: 'https://www.auchantelecom.fr/fr/client/Consommations/Factures/Default.html',
