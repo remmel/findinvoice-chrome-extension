@@ -61,6 +61,7 @@ class SettingsComponent extends LitElement {
     render() {
         return html`
             <h2>Settings</h2>
+            <!--
             <select value=${this.favoriteColor}
                     @change=${(e: Event) => this.favoriteColor = (e.target as HTMLSelectElement).value}>
                 <option value="red">red</option>
@@ -75,11 +76,13 @@ class SettingsComponent extends LitElement {
                 />
                 I like colors.
             </label>
+            -->
             <div>
                 Start date: <input type="date" .value=${this.startDate}
                                    @change=${(e: Event) => this.startDate = (e.target as HTMLSelectElement).value}/>
                 <button @click=${this.handleClearDate}>Clear date</button>
             </div>
+            <br />
             <div id="status">${this.statusMessage}</div>
             <button @click=${this.saveOptions}>Save</button>
             <button @click=${this.clearSyncCache}>Reset</button>

@@ -35,13 +35,17 @@ class CacheListComponent extends LitElement {
     render() {
         return html`
             <h2>Cached downloaded invoice</h2>
-            <button @click=${this.handleClearInvoice}>🗑️ Clear cache</button>
-            <button @click=${this.handleAddInvoice}>+ Add test</button>
+            List of invoices which have been downloaded.<br />
+            If you want to re-download it later, you have to remove it from the cache.<br />
+            The objective of that cache is to prevent from re-downloading an invoice that you have already downloaded.<br />
+            That list is here for debugging purposes.<br />
+            <br />
+            <!--<button @click=${this.handleAddInvoice}>+ Add test</button>-->
             <table>
                 <thead>
                 <tr>
                     <th>Invoice Filename</th>
-                    <th>🗑️</th>
+                    <th><button title="Clear cache" @click=${this.handleClearInvoice}>🗑️</button></th>
                 </tr>
                 </thead>
                 <tbody>

@@ -8,7 +8,8 @@
     "dev": "webpack --watch & vite",
     "build": "tsc && vite build && webpack",
     "watch": "vite build --watch",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "zip": "npm run build && cd dist && zip -r ../tmp_dist.zip *"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.23",

@@ -42,7 +42,7 @@ export const SUPPLIERS: Suppliers = {
     orangefr: {
         invoices: 'https://espace-client.orange.fr/facture-paiement/',
         matches: ['https://espace-client.orange.fr/*'],
-        label: 'Orange (fr)',
+        label: 'Orange.fr / Sosh',
     },
     leboncoinfr: {
         invoices: 'https://www.leboncoin.fr/compte/part/mes-transactions',

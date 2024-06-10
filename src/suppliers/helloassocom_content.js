@@ -6,7 +6,7 @@ console.log("helloassocom")
 
 async function main() {
     // console.time('waitForSelector')
-    await waitForSelector('ul#transactions li.Transaction')
+    await waitForSelector('ul#transactions li.Transaction', 10000)
     // console.timeEnd('waitForSelector')
 
     let invoices = []
