@@ -1,6 +1,6 @@
 
 // could try to reproduce similar API than https://pptr.dev/api/puppeteer.waitforselectoroptions
-import { MSGS_TO_BG, sleep } from "../utils_commons.js";
+import { MSGS_TO_BG, sleep } from "../utils_commons";
 
 export function waitForSelector(selector, timeout = 5000, interval = 100) {
     return new Promise((resolve, reject) => {

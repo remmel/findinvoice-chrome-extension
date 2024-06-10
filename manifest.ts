@@ -1,6 +1,6 @@
 import {defineManifest} from '@crxjs/vite-plugin'
 import {version} from './package.json'
-import {SUPPLIERS} from './src/worker/utils.js'
+import {SUPPLIERS} from "./src/suppliers/Suppliers";
 
 
 const content_scripts = Object.entries(SUPPLIERS).map(([key, value]) => ({

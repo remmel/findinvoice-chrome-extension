@@ -1,6 +1,7 @@
+import { SUPPLIERS } from "../suppliers/Suppliers";
 import { MSGS_EXT_TO_BG } from "../suppliers/utils_wm_msgext";
-import { CacheInvoice, getStartDate, MSGS_TO_BG, MSGS_FROM_BG } from "../utils_commons.js";
-import { convertAssoc, SUPPLIERS, waitForTabToClose } from "./utils.js"
+import { CacheInvoice, getStartDate, MSGS_TO_BG, MSGS_FROM_BG_TO_OPTS } from "../utils_commons";
+import { convertAssoc, waitForTabToClose } from "./utils.js"
 
 // /!\ no HMR :(, webpage reloaded, but extension must be reloaded manually (or changes here in background.js)
 // import leboncoin_mainWorld from '../suppliers/leboncoinfr_content_worldmain?script&module'
@@ -8,8 +9,6 @@ import { convertAssoc, SUPPLIERS, waitForTabToClose } from "./utils.js"
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installed.")
 })
-
-// console.log({leboncoin_mainWorld})
 
 
 chrome.scripting.registerContentScripts([
@@ -33,7 +32,7 @@ async function downloadInvoices(invoices, headers, supplier, preDownload=() =>{}
         const key = invoice.fn ?? invoice.id //to be improved prepending here the provider?
 
         if(startDate !== null && startDate > invoice.date) continue
-        if(await CacheInvoice.hasInvoice(key)) continue //already downloaded
+        if(await CacheInvoice.has(key)) continue //already downloaded
 
         const headersNV = convertAssoc(headers)
 
@@ -41,11 +40,11 @@ async function downloadInvoices(invoices, headers, supplier, preDownload=() =>{}
 
         await chrome.downloads.download({url: invoice.url, filename: invoice.fn, headers: headersNV})
 
-        await CacheInvoice.addInvoices([key])
+        await CacheInvoice.add([key])
         recent++
         // await sleep(50) //to avoid being caught as robot, specially with helloasso
     }
-    msg_frombg_invoicesDownloaded(recent, invoices, supplier)
+    msg_fromBg_toOpts_invoicesDownloaded(recent, invoices, supplier)
 }
 
 /**
@@ -58,7 +57,7 @@ async function downloadInvoiceNewTab(invoices, supplier) {
     const startDate = await getStartDate()
     for(const {fn, url, date} of invoices) {
         if(startDate !== null && startDate > date) continue
-        if(await CacheInvoice.hasInvoice(fn)) continue //already downloaded
+        if(await CacheInvoice.has(fn)) continue //already downloaded
 
         const subtab = await chrome.tabs.create({url}) //, active: false}) //must be active for autoclose
 
@@ -66,21 +65,21 @@ async function downloadInvoiceNewTab(invoices, supplier) {
         //could also close here the tab
         //could also check here if the window has been properly opened
         //FIXME better listen for download event to mark as downloaded!
-        CacheInvoice.addInvoices([fn])
+        CacheInvoice.add([fn])
         recent++
     }
 
     console.log('talk to options')
-    msg_frombg_invoicesDownloaded(recent, invoices, supplier)
+    msg_fromBg_toOpts_invoicesDownloaded(recent, invoices, supplier)
 
 
     if(tab)
         chrome.tabs.remove(tab.id)
 }
 
-function msg_frombg_invoicesDownloaded(recent, invoices, supplier) {
+function msg_fromBg_toOpts_invoicesDownloaded(recent, invoices, supplier) {
     console.log('downloadInvoices from',supplier, 'Found', invoices.length, 'New/Recent', recent, invoices)
-    chrome.runtime.sendMessage({action: MSGS_FROM_BG.invoicesDownloaded, recent, invoices, supplier})
+    chrome.runtime.sendMessage({action: MSGS_FROM_BG_TO_OPTS.invoicesDownloaded, recent, invoices, supplier})
 }
 
 let tab = null
@@ -99,13 +98,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break
         case MSGS_TO_BG.downloadInvoicesOpenAi: { //TODO find a more readable way
             const {invoices, headers, supplier} = request
+            chrome.tabs.remove(tab.id)
             downloadInvoices(invoices, headers, supplier, async invoice => {
                 const response = await fetch(invoice.url)
                 const item = await response.json()
                 invoice.url = item.file_url
-            }).then(_ =>
-                chrome.tabs.remove(tab.id)
-            )
+            })
         }
             break
         case MSGS_TO_BG.downloadInvoicesNewTab: {
@@ -114,10 +112,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             return true
         }
 
+        // invoices has already been downloaded by content, just need to display the information and close
         case MSGS_TO_BG.downloadedInvoices: {
             const {invoices, supplier, recent} = request
-            msg_frombg_invoicesDownloaded(recent, invoices, supplier)
-            // no need to close
+            msg_fromBg_toOpts_invoicesDownloaded(recent, invoices, supplier)
+            chrome.tabs.remove(tab.id)
             break
         }
 

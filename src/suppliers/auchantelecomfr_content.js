@@ -1,4 +1,4 @@
-import { CacheInvoice, CacheInvoice as CachedInvoice, getStartDate } from "../utils_commons.js";
+import { CacheInvoice, CacheInvoice as CachedInvoice, getStartDate } from "../utils_commons";
 import { msg_downloadedInvoices } from "./utils_content.js";
 
 console.log("auchantelecomfr")
@@ -45,7 +45,7 @@ async function main() {
     if(invoices.length === 0) return
 
     const startDate = await getStartDate()
-    const cachedInvoices = await CachedInvoice.getInvoices()
+    const cachedInvoices = await CachedInvoice.get()
 
     console.log(invoices, startDate)
 
@@ -59,11 +59,9 @@ async function main() {
         }
     }
 
-    await CacheInvoice.addInvoices(addedInvoices)
+    await CacheInvoice.add(addedInvoices)
 
     await msg_downloadedInvoices(invoices, 'auchantelecomfr', addedInvoices.length)
-
-    window.close()
 }
 
 

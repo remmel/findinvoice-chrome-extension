@@ -1,7 +1,7 @@
 // message from worldmain to background
-export const MSGS_EXT_TO_BG = {
-    startDate:'startDate',
-    downloadInvoicesNewTab: 'downloadInvoicesNewTab'
+export const enum MSGS_EXT_TO_BG {
+    startDate,
+    downloadInvoicesNewTab
 }
 
 const extensionId = 'pcbgkccklojkacgnadekalpoabbhmpgk'

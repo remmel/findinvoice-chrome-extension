@@ -1,21 +1,16 @@
-import { LitElement, html, css } from 'lit'
+import { LitElement, html } from 'lit'
+import {customElement, property} from 'lit/decorators.js';
 
+@customElement('settings-component')
+// @ts-ignore
 class SettingsComponent extends LitElement {
-    static get properties() {
-        return {
-            favoriteColor: {type: String},
-            likesColor: {type: Boolean},
-            statusMessage: {type: String},
-            startDate: {type: String, state: true}
-        }
-    }
+    @property({ type: String }) favoriteColor: string = 'red';
+    @property({ type: Boolean }) likesColor: boolean = true;
+    @property({ type: String }) statusMessage: string = '';
+    @property({ type: String, state: true }) startDate: string = '';
 
     constructor() {
         super()
-        this.favoriteColor = 'red'
-        this.likesColor = true
-        this.statusMessage = ''
-        this.startDate = ''
     }
 
     connectedCallback() {
@@ -45,7 +40,7 @@ class SettingsComponent extends LitElement {
         )
     }
 
-    updateStatusMessage(message) {
+    updateStatusMessage(message: string) {
         this.statusMessage = message
         setTimeout(() => this.statusMessage = '', 750)
     }
@@ -67,7 +62,7 @@ class SettingsComponent extends LitElement {
         return html`
             <h2>Settings</h2>
             <select value=${this.favoriteColor}
-                    @change=${e => this.favoriteColor = e.target.value}>
+                    @change=${(e: Event) => this.favoriteColor = (e.target as HTMLSelectElement).value}>
                 <option value="red">red</option>
                 <option value="green">green</option>
                 <option value="blue">blue</option>
@@ -82,7 +77,7 @@ class SettingsComponent extends LitElement {
             </label>
             <div>
                 Start date: <input type="date" .value=${this.startDate}
-                                   @change=${e => this.startDate = e.target.value}/>
+                                   @change=${(e: Event) => this.startDate = (e.target as HTMLSelectElement).value}/>
                 <button @click=${this.handleClearDate}>Clear date</button>
             </div>
             <div id="status">${this.statusMessage}</div>
@@ -91,5 +86,3 @@ class SettingsComponent extends LitElement {
         `
     }
 }
-
-customElements.define('settings-component', SettingsComponent)

@@ -1,12 +1,11 @@
-// import {LitElement, html} from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js'
-// https://lit.dev/docs/getting-started/#use-bundles (decorators not available w/o transpiler : https://lit.dev/docs/v1/components/decorators/#enabling-decorators)
-// https://developer.chrome.com/docs/extensions/develop/ui/options-page
-
 import { LitElement, html, css } from 'lit'
+import {customElement} from 'lit/decorators.js';
+
+
 import './suppliers-component.js'
 
-console.log('popup.js')
-
+@customElement('popup-app')
+// @ts-ignore
 class PopupApp extends LitElement {
     static get styles() {
         return css`
@@ -30,5 +29,3 @@ class PopupApp extends LitElement {
         `
     }
 }
-
-customElements.define('popup-app', PopupApp)

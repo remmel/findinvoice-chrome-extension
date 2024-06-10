@@ -1,4 +1,4 @@
-import { getStartDate, sleep } from "../utils_commons.js";
+import { getStartDate, sleep } from "../utils_commons";
 import {
     parseDateI18n,
     msg_downloadInvoicesNewTab,

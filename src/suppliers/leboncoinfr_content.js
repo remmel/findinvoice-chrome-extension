@@ -1,5 +1,5 @@
 // import leboncoin_mainWorld from './leboncoinfr_content_world2.js?script&module' - does not intercept early enough
-import { sleep } from "../utils_commons.js";
+import { sleep } from "../utils_commons";
 import { addStyle, waitForSelector } from "./utils_content.js";
 
 console.log("leboncoinfr_content")

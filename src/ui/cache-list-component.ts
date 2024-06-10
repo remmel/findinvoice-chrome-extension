@@ -1,16 +1,16 @@
-import { LitElement, html, css } from 'lit'
-import { CacheInvoice } from "../utils_commons.js";
+import { LitElement, html } from 'lit'
+import {customElement, property} from 'lit/decorators.js';
+import { CacheInvoice } from "../utils_commons";
 
+@customElement('cache-list-component')
+// @ts-ignore
 class CacheListComponent extends LitElement {
-    static get properties() {
-        return {
-            invoices: {type: Array, state: true}
-        }
-    }
+
+    @property({ type: Array, state: true })
+    invoices: string[] = []
 
     constructor() {
         super()
-        this.invoices = []
     }
 
     async connectedCallback() {
@@ -19,23 +19,21 @@ class CacheListComponent extends LitElement {
     }
 
     async loadInvoices() {
-        this.invoices = await CacheInvoice.getInvoices()
+        this.invoices = await CacheInvoice.get()
     }
 
     handleAddInvoice() {
         const min = 5.00, max = 500.00
         const price =  (Math.random() * (max - min) + min).toFixed(2);
-        CacheInvoice.addInvoices(['2024-05-21_dumb_'+price+'.pdf']).then(_ => this.loadInvoices())
+        CacheInvoice.add(['2024-05-21_dumb_'+price+'.pdf']).then(_ => this.loadInvoices())
     }
 
     handleClearInvoice() {
         CacheInvoice.clear().then(_ => this.loadInvoices())
     }
 
-    async handleRemoveInvoice(key) {
-        const invoices2 = this.invoices.filter(v => v !==key)
-        await CacheInvoice.clear()
-        await CacheInvoice.addInvoices(invoices2)
+    async handleRemoveInvoice(key: string) {
+        await CacheInvoice.remove(key)
         await this.loadInvoices()
     }
 
@@ -67,5 +65,3 @@ class CacheListComponent extends LitElement {
         `
     }
 }
-
-customElements.define('cache-list-component', CacheListComponent)

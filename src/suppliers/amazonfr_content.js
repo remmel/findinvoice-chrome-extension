@@ -1,4 +1,4 @@
-import { CacheInvoice, getStartDate } from "../utils_commons.js";
+import { CacheInvoice, getStartDate } from "../utils_commons";
 import { msg_downloadInvoices, parseDateI18n, parsePrice, waitForSelector } from "./utils_content.js";
 // import { extractTextFromData } from "./utils_content_pdf.js";
 
@@ -105,7 +105,7 @@ async function mainOrderList() {
 
         //TODO process only when all delivery of an order has been sent
 
-        const invoicesCached = await CacheInvoice.getInvoices()
+        const invoicesCached = await CacheInvoice.get()
         const ordersCached = invoicesCached.filter(label => label.includes('_amazon_')).map(label => label.split('_')[3].slice(0, -7))
         if(ordersCached.includes(orderId)) {
             console.log('already process', orderId)

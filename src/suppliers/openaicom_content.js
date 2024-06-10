@@ -1,4 +1,4 @@
-import { sleep } from "../utils_commons.js";
+import { MSGS_TO_BG, sleep } from "../utils_commons";
 
 console.log("openaicom")
 
@@ -46,7 +46,8 @@ async function main() {
 
             invoices.push({url, fn, id:null, date})
         }
-        chrome.runtime.sendMessage({action: 'downloadInvoicesOpenAi', invoices, supplier: 'openaicom'})
+        console.log(invoices)
+        await chrome.runtime.sendMessage({action: MSGS_TO_BG.downloadInvoicesOpenAi, invoices, supplier: 'openaicom'})
     }
 }
 
