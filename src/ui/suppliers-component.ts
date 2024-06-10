@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit'
-import {customElement, property} from 'lit/decorators.js';
-import {Suppliers, SUPPLIERS} from "../suppliers/Suppliers";
-import { MSGS_TO_BG, MSGS_FROM_BG_TO_OPTS } from "../utils_commons";
+import {customElement, property} from 'lit/decorators.js'
+import {Suppliers, SUPPLIERS} from "../suppliers/Suppliers"
+import { MSGS_TO_BG } from "../utils_commons"
 
 
 
@@ -23,22 +23,6 @@ class SuppliersComponent extends LitElement {
 
     constructor() {
         super()
-    }
-
-    connectedCallback() {
-        super.connectedCallback()
-        // @ts-ignore
-        chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            console.log(message)
-            if (message.action === MSGS_FROM_BG_TO_OPTS.invoicesDownloaded) {
-                const {recent, invoices, supplier} = message
-                this.collected = {...this.collected, [supplier]: {total: invoices.length, recent}} //to indicate that it has been updated
-            }
-        })
-    }
-
-    disconnectedCallback() {
-        super.disconnectedCallback();
     }
 
     static styles = css`

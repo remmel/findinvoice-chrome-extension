@@ -13,11 +13,6 @@ class CacheListComponent extends LitElement {
         super()
     }
 
-    async connectedCallback() {
-        super.connectedCallback()
-        await this.loadInvoices()
-    }
-
     async loadInvoices() {
         this.invoices = await CacheInvoice.get()
     }
