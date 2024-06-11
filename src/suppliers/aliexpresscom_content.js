@@ -105,7 +105,7 @@ async function mainOrdersList() {
 
 
 async function getDlButtonEl() {
-    await waitForSelector('.order-status.order-block button', 2000, 125)
+    await waitForSelector('.order-status.order-block button', 5000, 125)
 
     const invoiceKeywords = ['Download invoice', 'Descargar factura', 'Télécharger facture']
     const buttons = Array.from(document.querySelectorAll('.order-status.order-block button'))

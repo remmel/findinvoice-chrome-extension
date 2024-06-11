@@ -56,6 +56,11 @@ export const SUPPLIERS: Suppliers = {
         matches: ['https://www.helloasso.com/*'],
         label: 'HelloAsso',
     },
+    leboncoinfr: {
+        invoices: 'https://www.leboncoin.fr/compte/part/mes-transactions',
+        matches: ['https://www.leboncoin.fr/*'],
+        label: 'leboncoin',
+    },
     mobilefreefr: {
         invoices: 'https://mobile.free.fr/account/conso-et-factures',
         matches: ['https://mobile.free.fr/*'],
@@ -73,13 +78,17 @@ export const SUPPLIERS: Suppliers = {
     },
     paymentsgooglecom: {
         invoices: 'https://payments.google.com/gp/w/home/activity',
-        matches: ['https://payments.google.com/payments/u/0/timelineview*'],
+        matches: ['https://payments.google.com/payments/u/0/timelineview*'], //the iframe page
         label: 'Google Pay / Play / One',
         all_frames: true
     },
-    leboncoinfr: {
-        invoices: 'https://www.leboncoin.fr/compte/part/mes-transactions',
-        matches: ['https://www.leboncoin.fr/*'],
-        label: 'Leboncoin',
-    }
+    redsfrfr: {
+        invoices: 'https://www.red-by-sfr.fr/mon-espace-client/',
+        matches: [
+            'https://espace-client-red.sfr.fr/facture-mobile/consultation*',
+            'https://espace-client-red.sfr.fr/facture-fixe/consultation*',
+            'https://www.red-by-sfr.fr/mon-espace-client/*',
+        ],
+        label: 'RED by SFR'
+    },
 }
