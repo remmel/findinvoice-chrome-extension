@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit'
 import {customElement, property} from 'lit/decorators.js';
+import {getPreviousMonthFirstDay} from "../utils_commons";
 
 @customElement('settings-component')
 // @ts-ignore
@@ -49,9 +50,15 @@ class SettingsComponent extends LitElement {
         chrome.storage.sync.clear(() => {
             this.favoriteColor = 'red'
             this.likesColor = true
-            this.startDate = ''
+            this.startDate = getPreviousMonthFirstDay()
             this.updateStatusMessage('Sync cache cleared.')
         })
+    }
+
+    onStartDateChange(e: Event) {
+        this.startDate = (e.target as HTMLSelectElement).value
+        this.saveOptions()
+
     }
 
     handleClearDate() {
@@ -78,9 +85,7 @@ class SettingsComponent extends LitElement {
             </label>
             -->
             <div>
-                Start date: <input type="date" .value=${this.startDate}
-                                   @change=${(e: Event) => this.startDate = (e.target as HTMLSelectElement).value}/>
-                <button @click=${this.handleClearDate}>Clear date</button>
+                Start date: <input type="date" .value=${this.startDate} @change=${this.onStartDateChange}/>
             </div>
             <br />
             <div id="status">${this.statusMessage}</div>

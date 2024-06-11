@@ -5,6 +5,7 @@ import './cache-list-component'
 import './suppliers-component'
 import {CacheInvoice, MSGS_FROM_BG_TO_OPTS} from "../utils_commons";
 import {CollectedPerSupplier} from "./suppliers-component";
+import {SUPPLIERS} from "../suppliers/Suppliers";
 
 @customElement('options-app')
 // @ts-ignore
@@ -27,8 +28,10 @@ class OptionsApp extends LitElement {
         super.connectedCallback()
         // @ts-ignore
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+            console.log('msg', message)
             if (message.action === MSGS_FROM_BG_TO_OPTS.invoicesDownloaded) {
                 const {recent, invoices, supplier} = message
+                if(!(supplier in SUPPLIERS)) console.warn(`supplier=${supplier} not found in object`)
                 this.collected = {...this.collected, [supplier]: {total: invoices.length, recent}} //to indicate that it has been updated
                 CacheInvoice.get().then(invoices => this.invoices = invoices)
             }

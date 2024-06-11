@@ -1,4 +1,4 @@
-import { MSGS_TO_BG, sleep } from "../utils_commons";
+import { dateToYYYYMMDD, MSGS_TO_BG, sleep } from "../utils_commons";
 
 console.log("openaicom")
 
@@ -12,14 +12,7 @@ function getViewMoreEl() {
 function convertDateStringToYYYYMMDD(dateString) {
     // Create a new Date object from the date string
     const date = new Date(dateString);
-
-    // Get the year, month, and day from the Date object
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript, so we add 1
-    const day = String(date.getDate()).padStart(2, '0');
-
-    // Return the formatted date string
-    return `${year}-${month}-${day}`;
+    return dateToYYYYMMDD(date)
 }
 async function main() {
     if (window.location.href.startsWith('https://pay.openai.com/p/session/')) {

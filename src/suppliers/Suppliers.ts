@@ -1,12 +1,15 @@
 export type Supplier = {
     invoices: string;
-    matches: string[];
     label: string;
+    matches: string[];
+    all_frames?: boolean;
 };
 
 export type Suppliers = {
     [key: string]: Supplier;
 }
+//https://console.scaleway.com/billing/payment //api https://api.scaleway.com/billing/v1/invoices
+//ovh https://www.ovh.com/auth/api/createToken - GET = /me/bill*
 
 export const SUPPLIERS: Suppliers = {
     aliexpresscom: {
@@ -67,6 +70,12 @@ export const SUPPLIERS: Suppliers = {
         invoices: 'https://espace-client.orange.fr/facture-paiement/',
         matches: ['https://espace-client.orange.fr/*'],
         label: 'Orange.fr / Sosh',
+    },
+    paymentsgooglecom: {
+        invoices: 'https://payments.google.com/gp/w/home/activity',
+        matches: ['https://payments.google.com/payments/u/0/timelineview*'],
+        label: 'Google Pay / Play / One',
+        all_frames: true
     },
     leboncoinfr: {
         invoices: 'https://www.leboncoin.fr/compte/part/mes-transactions',

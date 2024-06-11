@@ -9,6 +9,28 @@ export async function getStartDate() {
     return startDate
 }
 
+export async function setStartDate(startDate: string) {
+    await chrome.storage.sync.set({startDate})
+}
+
+export function getPreviousMonthFirstDay() {
+    let now = new Date();
+    let year = now.getFullYear();
+    let month = now.getMonth();
+    let firstDayCurrentMonth = new Date(year, month, 1);
+    let previousMonth = new Date(firstDayCurrentMonth);
+    previousMonth.setMonth(previousMonth.getMonth() - 1);
+    return dateToYYYYMMDD(previousMonth)
+}
+
+export function dateToYYYYMMDD(d: Date) {
+    let year = d.getFullYear();
+    let month = (d.getMonth() + 1).toString().padStart(2, '0'); // getMonth() returns 0-11
+    let day = d.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+
 export const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
 

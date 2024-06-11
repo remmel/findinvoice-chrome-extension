@@ -1,14 +1,32 @@
 import { SUPPLIERS } from "../suppliers/Suppliers";
 import { MSGS_EXT_TO_BG } from "../suppliers/utils_wm_msgext";
-import { CacheInvoice, getStartDate, MSGS_TO_BG, MSGS_FROM_BG_TO_OPTS } from "../utils_commons";
+import {
+    CacheInvoice,
+    getStartDate,
+    MSGS_TO_BG,
+    MSGS_FROM_BG_TO_OPTS,
+    setStartDate,
+    getPreviousMonthFirstDay
+} from "../utils_commons";
 import { convertAssoc, waitForTabToClose } from "./utils.js"
 
 // /!\ no HMR :(, webpage reloaded, but extension must be reloaded manually (or changes here in background.js)
 // import leboncoin_mainWorld from '../suppliers/leboncoinfr_content_worldmain?script&module'
 
+async function configureStartDate() {
+    let startDate = await getStartDate()
+    if(!startDate) {
+        const previousMonthDate = getPreviousMonthFirstDay()
+        setStartDate(previousMonthDate)
+    }
+}
+
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installed.")
+    configureStartDate()
 })
+
+
 
 
 chrome.scripting.registerContentScripts([
@@ -31,6 +49,7 @@ async function downloadInvoices(invoices, headers, supplier, preDownload=() =>{}
     for(const invoice of invoices) {
         const key = invoice.fn ?? invoice.id //to be improved prepending here the provider?
 
+        if(!invoice.url) continue //we just here to say that we found an invoice
         if(startDate !== null && startDate > invoice.date) continue
         if(await CacheInvoice.has(key)) continue //already downloaded
 

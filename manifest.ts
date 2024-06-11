@@ -5,6 +5,7 @@ import {SUPPLIERS} from "./src/suppliers/Suppliers";
 
 const content_scripts = Object.entries(SUPPLIERS).map(([key, value]) => ({
     matches: value.matches,
+    all_frames: value.all_frames,
     js: [`src/suppliers/${key}_content.js`]
 }))
 
