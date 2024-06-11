@@ -39,15 +39,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           RELEASE_NAME="v0.1.0"
-          gh release view "$RELEASE_NAME"
           if gh release view "$RELEASE_NAME" >/dev/null 2>&1; then
           echo "Release $RELEASE_NAME already exists."
-          exit 0
           else
           echo "Release $RELEASE_NAME does not exist."
+          echo "tobereleased=true" >> $GITHUB_ENV
           fi
 
       - name: Create Release
+        if: env.tobereleased
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -60,6 +60,7 @@ jobs:
           prerelease: false
 
       - name: Upload Release Assets
+        if: env.tobereleased
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
