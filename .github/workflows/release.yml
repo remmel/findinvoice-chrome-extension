@@ -38,7 +38,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          RELEASE_NAME="v0.1.0"
+          RELEASE_NAME=v${{ env.PACKAGE_VERSION }}
           if gh release view "$RELEASE_NAME" >/dev/null 2>&1; then
           echo "Release $RELEASE_NAME already exists."
           else
