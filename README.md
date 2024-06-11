@@ -6,11 +6,11 @@ When clicking it goes to the website, reconnect if needed and download the new i
 If something is not working as expected the tab will stay open (to enter creds, ask for double authentication, etc.)
 otherwise, it will be closed.
 
-## Try
+## Try development version
 
-- [Download](https://github.com/remmel/findinvoice-chrome-extension/archive/refs/heads/main.zip)
-- Unzip it
-- Open Chrome, got to chrome://extensions/ > `Load unpacked`
+- [Download last release](https://github.com/remmel/findinvoice-chrome-extension/releases)
+- Open Chrome, got to chrome://extensions/
+- **Drag and drop** the zip in that extension page
 
 
 
