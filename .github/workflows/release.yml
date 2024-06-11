@@ -36,7 +36,7 @@ jobs:
       - name: Check for existing release
         id: check_release
         run: |
-          RELEASE_NAME="${{ env.PACKAGE_NAME }} v${{ env.PACKAGE_VERSION }}"
+          RELEASE_NAME="v${{ env.PACKAGE_VERSION }}"
           if gh release view "$RELEASE_NAME" >/dev/null 2>&1; then
           echo "Release $RELEASE_NAME already exists."
           exit 0
